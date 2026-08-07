@@ -24,12 +24,25 @@
       theme: {
         extend: {
           colors: {
-            navdark: '#0d1527',
-            carddark: '#09101f',
-            gold: '#ffb703',
-            goldhover: '#f0a800',
+            primary: '#1F7BFF',
+            onPrimary: '#FFFFFF',
+            secondary: '#6A1BFF',
+            appbg: '#F7F9FC',
+            surface: '#FFFFFF',
+            error: '#EF4444',
+            navdark: '#1F7BFF',
+            gold: '#1F7BFF',
+            goldhover: '#1962CC',
             brandred: '#9b1c1c',
             deepred: '#8b0000',
+          },
+          boxShadow: {
+            card: '0 4px 20px rgba(31, 123, 255, 0.12)',
+            m3: '0 4px 20px rgba(31, 123, 255, 0.12)',
+          },
+          borderRadius: {
+            'card': '20px',
+            'm3': '20px',
           },
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
@@ -42,11 +55,45 @@
   </script>
 
   <style>
+    :root {
+      --primary: #1F7BFF;
+      --on-primary: #FFFFFF;
+      --secondary: #6A1BFF;
+      --background: #F7F9FC;
+      --surface: #FFFFFF;
+      --error: #EF4444;
+      --primary-gradient: linear-gradient(135deg, #1F7BFF 0%, #6A1BFF 100%);
+      --button-gradient: linear-gradient(90deg, #2A7FFF 0%, #7B2CFF 100%);
+      --card-shadow: 0 4px 20px rgba(31, 123, 255, 0.12);
+      --card-radius: 20px;
+    }
+
     body {
-      background-color: #f1f5f9;
+      background-color: var(--background);
       color: #0f172a;
       -webkit-tap-highlight-color: transparent;
       touch-action: pan-y;
+    }
+
+    .bg-primary-gradient {
+      background: var(--primary-gradient);
+    }
+
+    .bg-button-gradient {
+      background: var(--button-gradient);
+    }
+
+    .m3-card {
+      background-color: var(--surface);
+      box-shadow: var(--card-shadow);
+      border-radius: var(--card-radius);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .m3-fab {
+      background-color: var(--secondary);
+      color: var(--on-primary);
+      box-shadow: 0 6px 18px rgba(106, 27, 255, 0.35);
     }
 
     /* Fixed A4 dimensions for Preview Modal & Single-Page PDF export */
@@ -135,22 +182,22 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans text-slate-800 pb-20 sm:pb-24">
+<body class="min-h-screen flex flex-col font-sans text-slate-800 pb-16 sm:pb-20">
 
   <!-- TOP HEADER APP BAR -->
-  <header class="bg-navdark text-white sticky top-0 z-40 shadow-lg border-b border-slate-800">
-    <div class="max-w-3xl mx-auto px-4 py-2.5 flex items-center justify-between">
+  <header class="bg-primary-gradient text-white sticky top-0 z-40 shadow-md">
+    <div class="max-w-2xl mx-auto px-3 py-2 flex items-center justify-between">
       
       <!-- Left Info -->
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gold text-navdark flex items-center justify-center font-bold text-xl shadow">
-          <i class="fa-solid fa-file-lines"></i>
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md text-white flex items-center justify-center font-bold text-lg shadow-sm border border-white/30 overflow-hidden p-0.5 flex-shrink-0">
+          <img src="https://uploads.onecompiler.io/44pbfr3gy/1786090529811/ChatGPT%20Image%20Aug%207,%202026,%2001_36_19%20PM.png" alt="Dashboard Logo" class="w-full h-full object-contain rounded-lg" />
         </div>
         <div>
-          <h1 id="app-bar-title" class="font-display font-extrabold text-base leading-tight tracking-tight text-white">
+          <h1 id="app-bar-title" class="font-display font-extrabold text-sm sm:text-base leading-tight tracking-tight text-white">
             Dashboard
           </h1>
-          <p id="app-bar-subtitle" class="text-[11px] text-slate-300">
+          <p id="app-bar-subtitle" class="text-[10px] sm:text-[11px] text-blue-100">
             Select Client & Rate Table
           </p>
         </div>
@@ -158,12 +205,7 @@
 
       <!-- Right Action Buttons -->
       <div class="flex items-center gap-2">
-        <button onclick="openPreviewModal()" class="px-3 py-1.5 rounded-lg bg-gold hover:bg-goldhover text-navdark font-bold text-xs flex items-center gap-1.5 shadow transition active:scale-95">
-          <i class="fa-solid fa-eye text-navdark"></i>
-          <span>Preview</span>
-        </button>
-
-        <button onclick="triggerPrint()" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 shadow transition active:scale-95">
+        <button onclick="triggerPrint()" class="px-3.5 py-1.5 rounded-xl bg-button-gradient text-white font-extrabold text-xs flex items-center gap-1.5 shadow transition active:scale-95">
           <i class="fa-solid fa-print"></i>
           <span>Print</span>
         </button>
@@ -173,27 +215,32 @@
   </header>
 
   <!-- MAIN CONTAINER (CONTAINING ALL SCREEN VIEWS) -->
-  <main class="max-w-3xl w-full mx-auto p-3 sm:p-5 flex-1 space-y-4">
+  <main class="max-w-2xl w-full mx-auto p-2.5 sm:p-4 flex-1 space-y-3">
 
     <!-- ==================== VIEW 1: HOME (DASHBOARD) ==================== -->
     <section id="view-home" class="space-y-4">
       
       <!-- CONTRACTOR PORTAL BANNER CARD -->
-      <div class="bg-navdark text-white p-5 rounded-3xl border border-slate-800 shadow-xl space-y-4 relative overflow-hidden">
+      <div class="bg-primary-gradient text-white p-5 rounded-[20px] shadow-card space-y-4 relative overflow-hidden">
         <div class="flex justify-between items-start">
-          <div class="space-y-1">
-            <span class="inline-block text-[10px] font-extrabold tracking-wider px-2.5 py-0.5 rounded-md bg-gold/15 text-gold border border-gold/30 uppercase">
-              CONTRACTOR & BUILDER PORTAL
-            </span>
-            <h2 id="dash-business-name" class="text-2xl font-black font-display tracking-tight text-white pt-0.5">
-              PAINT PLUS
-            </h2>
-            <p id="dash-business-phone" class="text-xs text-slate-300 font-medium">
-              +918349363479
-            </p>
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md p-1 border border-white/30 shadow-md flex-shrink-0 overflow-hidden">
+              <img src="https://uploads.onecompiler.io/44pbfr3gy/1786090529811/ChatGPT%20Image%20Aug%207,%202026,%2001_36_19%20PM.png" alt="Dashboard Logo" class="w-full h-full object-contain rounded-xl" />
+            </div>
+            <div class="space-y-1">
+              <span class="inline-block text-[10px] font-extrabold tracking-wider px-2.5 py-0.5 rounded-md bg-white/20 text-white border border-white/30 uppercase">
+                CONTRACTOR & BUILDER PORTAL
+              </span>
+              <h2 id="dash-business-name" class="text-2xl font-black font-display tracking-tight text-white pt-0.5">
+                PAINT PLUS
+              </h2>
+              <p id="dash-business-phone" class="text-xs text-blue-100 font-medium">
+                +918349363479
+              </p>
+            </div>
           </div>
 
-          <button onclick="switchTab('quotation')" class="px-3.5 py-2 rounded-xl bg-gold hover:bg-goldhover text-navdark font-extrabold text-xs flex items-center gap-1.5 shadow-lg active:scale-95 transition">
+          <button onclick="switchTab('quotation')" class="px-4 py-2 rounded-xl bg-button-gradient text-white font-extrabold text-xs flex items-center gap-1.5 shadow-lg active:scale-95 transition">
             <i class="fa-solid fa-plus"></i>
             <span>+ Quote</span>
           </button>
@@ -201,15 +248,15 @@
 
         <!-- 2 Stat Boxes -->
         <div class="grid grid-cols-2 gap-3 pt-1">
-          <div class="bg-slate-900/80 p-3 rounded-2xl border border-slate-800">
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">TOTAL QUOTE VALUE</p>
-            <p id="dash-total-value" class="text-lg font-black font-mono text-gold mt-0.5">₹13,500</p>
+          <div class="bg-white/15 backdrop-blur-md p-3.5 rounded-2xl border border-white/20">
+            <p class="text-[10px] font-bold text-blue-100 uppercase tracking-wider">TOTAL QUOTE VALUE</p>
+            <p id="dash-total-value" class="text-xl font-black font-mono text-white mt-0.5">₹13,500</p>
           </div>
 
-          <div class="bg-slate-900/80 p-3 rounded-2xl border border-slate-800">
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">ACTIVE QUOTATIONS</p>
+          <div class="bg-white/15 backdrop-blur-md p-3.5 rounded-2xl border border-white/20">
+            <p class="text-[10px] font-bold text-blue-100 uppercase tracking-wider">ACTIVE QUOTATIONS</p>
             <p id="dash-active-count" class="text-sm font-bold text-white mt-1">
-              <span id="dash-count-num">1</span> <span class="text-emerald-400 text-xs font-semibold">(1 Approved)</span>
+              <span id="dash-count-num">1</span> <span class="text-blue-100 text-xs font-semibold">(1 Approved)</span>
             </p>
           </div>
         </div>
@@ -217,24 +264,24 @@
 
       <!-- 3 QUICK ACTION GRID -->
       <div class="grid grid-cols-3 gap-3">
-        <button onclick="switchTab('quotation')" class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center text-center space-y-1.5 hover:border-amber-300 transition active:scale-95">
-          <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-lg">
+        <button onclick="switchTab('quotation')" class="m3-card p-3.5 flex flex-col items-center text-center space-y-1.5 hover:border-blue-300 transition active:scale-95">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#1F7BFF] flex items-center justify-center text-lg">
             <i class="fa-solid fa-file-invoice"></i>
           </div>
           <span class="font-bold text-xs text-slate-800 leading-tight">Create Quotation</span>
           <span class="text-[10px] text-slate-400 font-medium">Rate & Sq.Ft</span>
         </button>
 
-        <button onclick="switchTab('item', 'clients')" class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center text-center space-y-1.5 hover:border-blue-300 transition active:scale-95">
-          <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-lg">
+        <button onclick="switchTab('item', 'clients')" class="m3-card p-3.5 flex flex-col items-center text-center space-y-1.5 hover:border-purple-300 transition active:scale-95">
+          <div class="w-10 h-10 rounded-xl bg-purple-50 text-[#6A1BFF] flex items-center justify-center text-lg">
             <i class="fa-solid fa-user-group"></i>
           </div>
           <span class="font-bold text-xs text-slate-800 leading-tight">Clients</span>
           <span id="dash-quick-clients-count" class="text-[10px] text-slate-400 font-medium">1 Saved</span>
         </button>
 
-        <button onclick="switchTab('item', 'work')" class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center text-center space-y-1.5 hover:border-emerald-300 transition active:scale-95">
-          <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg">
+        <button onclick="switchTab('item', 'work')" class="m3-card p-3.5 flex flex-col items-center text-center space-y-1.5 hover:border-blue-300 transition active:scale-95">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#1F7BFF] flex items-center justify-center text-lg">
             <i class="fa-solid fa-layer-group"></i>
           </div>
           <span class="font-bold text-xs text-slate-800 leading-tight">Work Items</span>
@@ -246,10 +293,10 @@
       <div class="space-y-2.5">
         <div class="flex items-center justify-between px-1">
           <h3 class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
-            <i class="fa-regular fa-clock text-amber-500"></i> Recent Quotations
+            <i class="fa-regular fa-clock text-[#1F7BFF]"></i> Recent Quotations
           </h3>
           <span class="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
-            <i class="fa-solid fa-hand-pointer text-amber-500 text-[10px]"></i> Swipe left to remove
+            <i class="fa-solid fa-hand-pointer text-[#1F7BFF] text-[10px]"></i> Swipe left to remove
           </span>
         </div>
 
@@ -264,12 +311,12 @@
     <section id="view-quotation" class="space-y-4 hidden">
       
       <!-- CARD 1: QUOTE REFERENCE & DATES -->
-      <div class="bg-amber-50/60 rounded-2xl border border-amber-200/80 p-4 space-y-3">
+      <div class="m3-card p-4 space-y-3">
         <div class="flex items-center justify-between">
-          <h3 class="font-extrabold text-xs tracking-wider uppercase text-amber-900 flex items-center gap-1.5">
-            <i class="fa-regular fa-calendar-days text-amber-600"></i> QUOTE REFERENCE & DATES
+          <h3 class="font-extrabold text-xs tracking-wider uppercase text-[#1F7BFF] flex items-center gap-1.5">
+            <i class="fa-regular fa-calendar-days text-[#1F7BFF]"></i> QUOTE REFERENCE & DATES
           </h3>
-          <button onclick="resetQuotationForm()" class="px-2.5 py-1 rounded-lg bg-navdark text-white font-bold text-[11px] hover:bg-slate-800 transition">
+          <button onclick="resetQuotationForm()" class="px-2.5 py-1 rounded-lg bg-slate-100 text-[#1F7BFF] font-bold text-[11px] hover:bg-blue-50 transition">
             + New / Reset
           </button>
         </div>
@@ -277,46 +324,46 @@
         <div class="space-y-2 text-xs">
           <div>
             <label class="block font-bold text-slate-600 mb-1 uppercase text-[10px]">QUOTE REFERENCE #</label>
-            <input type="text" id="quote-ref-input" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-mono font-bold text-slate-800 focus:ring-2 focus:ring-amber-500" />
+            <input type="text" id="quote-ref-input" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 font-mono font-bold text-slate-800 focus:ring-2 focus:ring-[#1F7BFF]" />
           </div>
 
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block font-bold text-slate-600 mb-1 uppercase text-[10px]">QUOTATION DATE</label>
-              <input type="text" id="quote-date-input" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-medium text-slate-800" />
+              <input type="text" id="quote-date-input" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 font-medium text-slate-800" />
             </div>
             <div>
               <label class="block font-bold text-slate-600 mb-1 uppercase text-[10px]">VALID UNTIL</label>
-              <input type="text" id="quote-valid-input" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-medium text-slate-800" />
+              <input type="text" id="quote-valid-input" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 font-medium text-slate-800" />
             </div>
           </div>
         </div>
       </div>
 
       <!-- CARD 2: SELECT CLIENT -->
-      <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-3 shadow-sm">
+      <div class="m3-card p-4 space-y-3">
         <div class="flex items-center justify-between">
           <h3 class="font-extrabold text-xs tracking-wider text-slate-800 flex items-center gap-1.5">
-            <i class="fa-solid fa-user text-amber-500"></i> 1. SELECT CLIENT
+            <i class="fa-solid fa-user text-[#1F7BFF]"></i> 1. SELECT CLIENT
           </h3>
-          <button onclick="openAddClientModal()" class="px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs flex items-center gap-1 border border-amber-200">
+          <button onclick="openAddClientModal()" class="px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-[#1F7BFF] font-bold text-xs flex items-center gap-1 border border-blue-200">
             <i class="fa-solid fa-user-plus text-[10px]"></i> + Add Client
           </button>
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-500 mb-1">Choose Client:</label>
-          <select id="quote-client-select" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 bg-white font-medium text-xs text-slate-800 focus:ring-2 focus:ring-amber-500" onchange="handleClientSelectChange()">
+          <select id="quote-client-select" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white font-medium text-xs text-slate-800 focus:ring-2 focus:ring-[#1F7BFF]" onchange="handleClientSelectChange()">
             <!-- Populated dynamically -->
           </select>
         </div>
       </div>
 
       <!-- CARD 3: WORK NAME & ITEMS TABLE BUILDER -->
-      <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-3 shadow-sm">
+      <div class="m3-card p-4 space-y-3">
         <div class="flex items-center justify-between">
           <h3 class="font-extrabold text-xs tracking-wider text-slate-800 flex items-center gap-1.5">
-            <i class="fa-solid fa-calculator text-amber-500"></i> 2. WORK NAME & ITEMS
+            <i class="fa-solid fa-calculator text-[#1F7BFF]"></i> 2. WORK NAME & ITEMS
           </h3>
           <span id="quote-items-badge" class="text-xs font-bold text-slate-400">4 Items</span>
         </div>
@@ -327,39 +374,39 @@
         </div>
 
         <!-- Add Work Item Big Button -->
-        <button onclick="addQuoteWorkItem()" class="w-full py-3 border-2 border-dashed border-amber-400 bg-amber-50/40 hover:bg-amber-50 text-amber-700 font-bold text-lg rounded-2xl transition flex items-center justify-center">
+        <button onclick="addQuoteWorkItem()" class="w-full py-3 border-2 border-dashed border-[#1F7BFF]/40 bg-blue-50/30 hover:bg-blue-50 text-[#1F7BFF] font-bold text-lg rounded-2xl transition flex items-center justify-center">
           <i class="fa-solid fa-plus"></i>
         </button>
       </div>
 
       <!-- CARD 4: SUMMARY & FINANCIAL TOTALS -->
-      <div class="bg-navdark text-white rounded-3xl p-5 space-y-4 shadow-xl border border-slate-800">
-        <h3 class="font-extrabold text-xs tracking-wider text-amber-400 uppercase">
+      <div class="bg-primary-gradient text-white rounded-[20px] p-5 space-y-4 shadow-card">
+        <h3 class="font-extrabold text-xs tracking-wider text-blue-100 uppercase">
           3. SUMMARY & FINANCIAL TOTALS
         </h3>
 
-        <div class="space-y-2 border-b border-slate-800 pb-3 text-xs">
-          <div class="flex justify-between items-center text-slate-300">
+        <div class="space-y-2 border-b border-white/20 pb-3 text-xs">
+          <div class="flex justify-between items-center text-blue-100">
             <span id="summary-subtotal-label">Subtotal (4 items):</span>
             <span id="summary-subtotal-val" class="font-bold font-mono text-white text-sm">₹13,500</span>
           </div>
 
           <div class="flex justify-between items-center pt-2">
-            <span class="font-black text-lg text-amber-400">Grand Total:</span>
-            <span id="summary-grand-total-val" class="font-black font-mono text-2xl text-amber-400">₹13,500</span>
+            <span class="font-black text-lg text-white">Grand Total:</span>
+            <span id="summary-grand-total-val" class="font-black font-mono text-2xl text-white">₹13,500</span>
           </div>
         </div>
 
         <!-- Terms in Summary -->
         <div class="space-y-1.5">
-          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">TERMS & CONDITIONS:</label>
-          <div id="summary-terms-box" class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 text-[11px] text-slate-300 max-h-28 overflow-y-auto leading-relaxed space-y-1">
+          <label class="block text-[11px] font-bold text-blue-100 uppercase tracking-wider">TERMS & CONDITIONS:</label>
+          <div id="summary-terms-box" class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/20 text-[11px] text-white max-h-28 overflow-y-auto leading-relaxed space-y-1">
             <!-- Populated dynamically -->
           </div>
         </div>
 
         <!-- Save Button -->
-        <button onclick="saveQuotation()" class="w-full py-3.5 rounded-2xl bg-gold hover:bg-goldhover text-navdark font-black text-sm flex items-center justify-center gap-2 shadow-lg transition active:scale-95">
+        <button onclick="saveQuotation()" class="w-full py-3.5 rounded-2xl bg-button-gradient text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg transition active:scale-95">
           <i class="fa-solid fa-floppy-disk text-base"></i>
           <span>Save Quotation</span>
         </button>
@@ -371,8 +418,8 @@
     <section id="view-item" class="space-y-4 hidden">
       
       <!-- TOP SUB-TABS: WORK VS CLIENTS -->
-      <div class="bg-slate-200/80 p-1 rounded-2xl flex items-center gap-1">
-        <button id="subtab-btn-work" onclick="switchItemSubTab('work')" class="flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition bg-navdark text-amber-400 shadow">
+      <div class="bg-slate-200/70 p-1 rounded-2xl flex items-center gap-1">
+        <button id="subtab-btn-work" onclick="switchItemSubTab('work')" class="flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition bg-button-gradient text-white shadow">
           <i class="fa-solid fa-layer-group"></i>
           <span id="subtab-work-label">Work (4)</span>
         </button>
@@ -389,16 +436,16 @@
         <div class="flex items-center gap-2">
           <div class="relative flex-1">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-            <input type="text" id="work-search-input" placeholder="Search work item or category..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:ring-2 focus:ring-amber-500" oninput="renderWorkItemsList()" />
+            <input type="text" id="work-search-input" placeholder="Search work item or category..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:ring-2 focus:ring-[#1F7BFF]" oninput="renderWorkItemsList()" />
           </div>
-          <button onclick="openAddWorkItemModal()" class="px-3 py-2 bg-gold hover:bg-goldhover text-navdark font-bold text-xs rounded-xl flex items-center gap-1 shadow whitespace-nowrap">
+          <button onclick="openAddWorkItemModal()" class="px-3.5 py-2 bg-button-gradient text-white font-bold text-xs rounded-xl flex items-center gap-1 shadow whitespace-nowrap">
             <i class="fa-solid fa-plus text-[10px]"></i> + Add Item
           </button>
         </div>
 
         <div class="flex justify-end px-1">
           <span class="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
-            <i class="fa-solid fa-hand-pointer text-amber-500 text-[10px]"></i> Swipe left on item to remove
+            <i class="fa-solid fa-hand-pointer text-[#1F7BFF] text-[10px]"></i> Swipe left on item to remove
           </span>
         </div>
 
@@ -414,16 +461,16 @@
         <div class="flex items-center gap-2">
           <div class="relative flex-1">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-            <input type="text" id="clients-search-input" placeholder="Search client name or phone..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:ring-2 focus:ring-amber-500" oninput="renderClientsList()" />
+            <input type="text" id="clients-search-input" placeholder="Search client name or phone..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium focus:ring-2 focus:ring-[#1F7BFF]" oninput="renderClientsList()" />
           </div>
-          <button onclick="openAddClientModal()" class="px-3 py-2 bg-gold hover:bg-goldhover text-navdark font-bold text-xs rounded-xl flex items-center gap-1 shadow whitespace-nowrap">
+          <button onclick="openAddClientModal()" class="px-3.5 py-2 bg-button-gradient text-white font-bold text-xs rounded-xl flex items-center gap-1 shadow whitespace-nowrap">
             <i class="fa-solid fa-user-plus text-[10px]"></i> + Add Client
           </button>
         </div>
 
         <div class="flex justify-end px-1">
           <span class="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
-            <i class="fa-solid fa-hand-pointer text-amber-500 text-[10px]"></i> Swipe left on client to remove
+            <i class="fa-solid fa-hand-pointer text-[#1F7BFF] text-[10px]"></i> Swipe left on client to remove
           </span>
         </div>
 
@@ -438,9 +485,9 @@
     <!-- ==================== VIEW 4: MORE / BUSINESS SETTINGS ==================== -->
     <section id="view-more" class="space-y-4 hidden">
       
-      <div class="bg-white rounded-3xl border border-slate-200/80 p-5 space-y-4 shadow-sm">
+      <div class="m3-card p-5 space-y-4">
         <div class="flex items-center gap-2 pb-2 border-b border-slate-100">
-          <i class="fa-solid fa-building text-amber-500 text-base"></i>
+          <i class="fa-solid fa-building text-[#1F7BFF] text-base"></i>
           <h2 class="font-extrabold text-sm text-slate-800 tracking-wide uppercase">
             BUSINESS & PROFILE SETTINGS
           </h2>
@@ -450,14 +497,14 @@
           
           <div>
             <label class="block font-bold text-slate-700 mb-1">Business / Contractor Name *</label>
-            <input type="text" id="set-business-name" required class="w-full px-3 py-2.5 rounded-xl border border-slate-300 font-semibold text-slate-800 focus:ring-2 focus:ring-amber-500" />
+            <input type="text" id="set-business-name" required class="w-full px-3 py-2.5 rounded-xl border border-slate-300 font-semibold text-slate-800 focus:ring-2 focus:ring-[#1F7BFF]" />
           </div>
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Company Logo (Upload or Image URL)</label>
             <div class="flex gap-2">
-              <input type="text" id="set-logo-url" placeholder="https://example.com/logo.png or upload image" class="flex-1 px-3 py-2.5 rounded-xl border border-slate-300 text-slate-800 focus:ring-2 focus:ring-amber-500" />
-              <button type="button" onclick="triggerLogoUpload()" class="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 font-bold text-slate-700 rounded-xl">
+              <input type="text" id="set-logo-url" placeholder="https://example.com/logo.png or upload image" class="flex-1 px-3 py-2.5 rounded-xl border border-slate-300 text-slate-800 focus:ring-2 focus:ring-[#1F7BFF]" />
+              <button type="button" onclick="triggerLogoUpload()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 rounded-xl">
                 Upload
               </button>
               <input type="file" id="logo-file-input" accept="image/*" class="hidden" onchange="handleLogoFileSelect(this)" />
@@ -466,13 +513,13 @@
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Tagline / Subtitle</label>
-            <input type="text" id="set-tagline" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-slate-800 focus:ring-2 focus:ring-amber-500" />
+            <input type="text" id="set-tagline" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-slate-800 focus:ring-2 focus:ring-[#1F7BFF]" />
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block font-bold text-slate-700 mb-1">Phone</label>
-              <input type="text" id="set-phone" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-slate-800 focus:ring-2 focus:ring-amber-500" />
+              <input type="text" id="set-phone" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-slate-800 focus:ring-2 focus:ring-[#1F7BFF]" />
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">Currency Symbol</label>
@@ -487,25 +534,25 @@
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Email</label>
-            <input type="email" id="set-email" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-slate-800 focus:ring-2 focus:ring-amber-500" />
+            <input type="email" id="set-email" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-slate-800 focus:ring-2 focus:ring-[#1F7BFF]" />
           </div>
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Business Address</label>
-            <textarea id="set-address" rows="2" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-slate-800 focus:ring-2 focus:ring-amber-500"></textarea>
+            <textarea id="set-address" rows="2" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-slate-800 focus:ring-2 focus:ring-[#1F7BFF]"></textarea>
           </div>
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">GSTIN Number</label>
-            <input type="text" id="set-gstin" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-slate-800 focus:ring-2 focus:ring-amber-500" />
+            <input type="text" id="set-gstin" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-slate-800 focus:ring-2 focus:ring-[#1F7BFF]" />
           </div>
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Default Terms & Conditions</label>
-            <textarea id="set-terms" rows="4" class="w-full p-3 rounded-xl border border-slate-300 text-slate-800 leading-relaxed focus:ring-2 focus:ring-amber-500"></textarea>
+            <textarea id="set-terms" rows="4" class="w-full p-3 rounded-xl border border-slate-300 text-slate-800 leading-relaxed focus:ring-2 focus:ring-[#1F7BFF]"></textarea>
           </div>
 
-          <button type="submit" class="w-full py-3.5 rounded-2xl bg-gold hover:bg-goldhover text-navdark font-black text-sm flex items-center justify-center gap-2 shadow-lg transition active:scale-95">
+          <button type="submit" class="w-full py-3.5 rounded-2xl bg-button-gradient text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg transition active:scale-95">
             <i class="fa-solid fa-floppy-disk"></i>
             <span>Save Profile Settings</span>
           </button>
@@ -516,40 +563,45 @@
 
   </main>
 
-  <!-- BOTTOM NAVIGATION BAR -->
-  <nav class="bg-navdark text-slate-400 fixed bottom-0 left-0 right-0 z-40 border-t border-slate-800 shadow-2xl">
-    <div class="max-w-3xl mx-auto grid grid-cols-4 h-16">
+  <!-- BOTTOM NAVIGATION BAR (Material 3 Theme) -->
+  <nav class="bg-white text-[#9CA3AF] fixed bottom-0 left-0 right-0 z-40 border-t border-slate-100 shadow-2xl">
+    <div class="max-w-2xl mx-auto grid grid-cols-4 h-14">
       
       <!-- Home Tab -->
-      <button onclick="switchTab('home')" id="nav-btn-home" class="relative flex flex-col items-center justify-center gap-1 text-gold">
-        <div id="nav-indicator-home" class="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-gold rounded-b-full"></div>
-        <i class="fa-solid fa-house text-lg"></i>
-        <span class="text-[11px] font-bold">Home</span>
+      <button onclick="switchTab('home')" id="nav-btn-home" class="relative flex flex-col items-center justify-center gap-0.5 text-[#1F7BFF]">
+        <div id="nav-indicator-home" class="absolute top-0 left-1/2 -translate-x-1/2 w-7 h-1 bg-[#1F7BFF] rounded-b-full"></div>
+        <i class="fa-solid fa-house text-base"></i>
+        <span class="text-[10px] font-bold">Home</span>
       </button>
 
       <!-- Quotation Tab -->
-      <button onclick="switchTab('quotation')" id="nav-btn-quotation" class="relative flex flex-col items-center justify-center gap-1 hover:text-slate-200">
-        <div id="nav-indicator-quotation" class="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-gold rounded-b-full hidden"></div>
-        <i class="fa-solid fa-file-invoice text-lg"></i>
-        <span class="text-[11px] font-bold">Quotation</span>
+      <button onclick="switchTab('quotation')" id="nav-btn-quotation" class="relative flex flex-col items-center justify-center gap-0.5 text-[#9CA3AF] hover:text-slate-600">
+        <div id="nav-indicator-quotation" class="absolute top-0 left-1/2 -translate-x-1/2 w-7 h-1 bg-[#1F7BFF] rounded-b-full hidden"></div>
+        <i class="fa-solid fa-file-invoice text-base"></i>
+        <span class="text-[10px] font-bold">Quotation</span>
       </button>
 
       <!-- Item Tab -->
-      <button onclick="switchTab('item')" id="nav-btn-item" class="relative flex flex-col items-center justify-center gap-1 hover:text-slate-200">
-        <div id="nav-indicator-item" class="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-gold rounded-b-full hidden"></div>
-        <i class="fa-solid fa-layer-group text-lg"></i>
-        <span class="text-[11px] font-bold">Item</span>
+      <button onclick="switchTab('item')" id="nav-btn-item" class="relative flex flex-col items-center justify-center gap-0.5 text-[#9CA3AF] hover:text-slate-600">
+        <div id="nav-indicator-item" class="absolute top-0 left-1/2 -translate-x-1/2 w-7 h-1 bg-[#1F7BFF] rounded-b-full hidden"></div>
+        <i class="fa-solid fa-layer-group text-base"></i>
+        <span class="text-[10px] font-bold">Item</span>
       </button>
 
       <!-- More Tab -->
-      <button onclick="switchTab('more')" id="nav-btn-more" class="relative flex flex-col items-center justify-center gap-1 hover:text-slate-200">
-        <div id="nav-indicator-more" class="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-gold rounded-b-full hidden"></div>
-        <i class="fa-solid fa-ellipsis text-lg"></i>
-        <span class="text-[11px] font-bold">More</span>
+      <button onclick="switchTab('more')" id="nav-btn-more" class="relative flex flex-col items-center justify-center gap-0.5 text-[#9CA3AF] hover:text-slate-600">
+        <div id="nav-indicator-more" class="absolute top-0 left-1/2 -translate-x-1/2 w-7 h-1 bg-[#1F7BFF] rounded-b-full hidden"></div>
+        <i class="fa-solid fa-ellipsis text-base"></i>
+        <span class="text-[10px] font-bold">More</span>
       </button>
 
     </div>
   </nav>
+
+  <!-- FLOATING ACTION BUTTON (FAB) -->
+  <button onclick="switchTab('quotation')" title="Create New Quotation" class="m3-fab fixed bottom-16 right-4 z-40 w-12 h-12 rounded-full flex items-center justify-center text-white text-lg shadow-xl hover:scale-105 active:scale-95 transition-all">
+    <i class="fa-solid fa-plus text-white"></i>
+  </button>
 
   <!-- ==================== MODALS ==================== -->
 
@@ -1019,12 +1071,12 @@
       const panelClients = document.getElementById('item-panel-clients');
 
       if (subTab === 'work') {
-        btnWork.className = "flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition bg-navdark text-amber-400 shadow";
+        btnWork.className = "flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition bg-button-gradient text-white shadow";
         btnClients.className = "flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition text-slate-600 hover:text-slate-900";
         panelWork.classList.remove('hidden');
         panelClients.classList.add('hidden');
       } else {
-        btnClients.className = "flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition bg-navdark text-amber-400 shadow";
+        btnClients.className = "flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition bg-button-gradient text-white shadow";
         btnWork.className = "flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition text-slate-600 hover:text-slate-900";
         panelClients.classList.remove('hidden');
         panelWork.classList.add('hidden');
@@ -1056,10 +1108,10 @@
         const indicator = document.getElementById(`nav-indicator-${t}`);
 
         if (t === appState.activeTab) {
-          if (btn) btn.className = "relative flex flex-col items-center justify-center gap-1 text-gold";
+          if (btn) btn.className = "relative flex flex-col items-center justify-center gap-1 text-[#1F7BFF]";
           if (indicator) indicator.classList.remove('hidden');
         } else {
-          if (btn) btn.className = "relative flex flex-col items-center justify-center gap-1 hover:text-slate-200 text-slate-400";
+          if (btn) btn.className = "relative flex flex-col items-center justify-center gap-1 text-[#9CA3AF] hover:text-slate-600";
           if (indicator) indicator.classList.add('hidden');
         }
       });
@@ -1184,20 +1236,20 @@
         const total = calculateQuoteGrandTotal(q);
 
         const wrapper = document.createElement('div');
-        wrapper.className = "swipe-container rounded-3xl mb-3 shadow-sm";
+        wrapper.className = "swipe-container rounded-[20px] mb-3 shadow-card";
 
         wrapper.innerHTML = `
           <!-- Delete Panel behind card -->
-          <div class="absolute inset-y-0 right-0 w-28 bg-red-600 rounded-r-3xl flex items-center justify-end pr-4 text-white font-bold text-xs gap-1.5 cursor-pointer" onclick="deleteQuotation('${q.id}')">
+          <div class="absolute inset-y-0 right-0 w-28 bg-red-600 rounded-r-[20px] flex items-center justify-end pr-4 text-white font-bold text-xs gap-1.5 cursor-pointer" onclick="deleteQuotation('${q.id}')">
             <i class="fa-solid fa-trash-can"></i>
             <span>Remove</span>
           </div>
 
           <!-- Foreground Swipe Card -->
-          <div class="swipe-card bg-white p-4 rounded-3xl border border-slate-200/80 space-y-3 relative z-10">
+          <div class="swipe-card m3-card p-4 space-y-3 relative z-10">
             <div class="flex justify-between items-start">
               <div class="flex items-center gap-2">
-                <span class="text-[11px] font-bold font-mono px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 border border-slate-200">
+                <span class="text-[11px] font-bold font-mono px-2 py-0.5 rounded-lg bg-blue-50 text-[#1F7BFF] border border-blue-100">
                   #${q.refNo}
                 </span>
                 <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
@@ -1205,7 +1257,7 @@
                 </span>
               </div>
               <div class="flex items-center gap-2">
-                <span class="font-black font-mono text-base text-amber-600">${appState.profile.currency}${formatNumber(total)}</span>
+                <span class="font-black font-mono text-base text-[#1F7BFF]">${appState.profile.currency}${formatNumber(total)}</span>
                 <button onclick="deleteQuotation('${q.id}')" title="Delete quotation" class="w-7 h-7 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center text-xs">
                   <i class="fa-solid fa-trash-can"></i>
                 </button>
@@ -1218,7 +1270,7 @@
             </div>
 
             <div class="flex gap-2 pt-1">
-              <button onclick="editSavedQuotation('${q.id}')" class="flex-1 py-2 rounded-xl bg-gold hover:bg-goldhover text-navdark font-extrabold text-xs shadow transition active:scale-95">
+              <button onclick="editSavedQuotation('${q.id}')" class="flex-1 py-2 rounded-xl bg-button-gradient text-white font-extrabold text-xs shadow transition active:scale-95">
                 Open & Edit
               </button>
               <button onclick="deleteQuotation('${q.id}')" class="px-3 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs transition flex items-center gap-1">
@@ -1300,10 +1352,10 @@
           <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">WORK NAME</div>
           
           <div class="flex items-center gap-2">
-            <span class="w-6 h-6 rounded-full bg-navdark text-white font-bold text-xs flex items-center justify-center flex-shrink-0">
+            <span class="w-6 h-6 rounded-full bg-button-gradient text-white font-bold text-xs flex items-center justify-center flex-shrink-0">
               ${index + 1}
             </span>
-            <select class="flex-1 px-3 py-2 rounded-xl border border-slate-300 bg-white font-semibold text-xs text-slate-800" onchange="updateQuoteWorkItem(${index}, 'workId', this.value)">
+            <select class="flex-1 px-3 py-2 rounded-xl border border-slate-300 bg-white font-semibold text-xs text-slate-800 focus:ring-2 focus:ring-[#1F7BFF]" onchange="updateQuoteWorkItem(${index}, 'workId', this.value)">
               ${workOptionsHtml}
             </select>
           </div>
@@ -1311,14 +1363,14 @@
           <div class="grid grid-cols-2 gap-2 pt-1">
             <div>
               <label class="block text-[10px] font-bold text-slate-500 mb-0.5">ENTER AREA (SQ.FT)</label>
-              <input type="number" value="${item.area || ''}" placeholder="0" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 font-mono font-bold text-sm bg-white" oninput="updateQuoteWorkItem(${index}, 'area', this.value)" />
+              <input type="number" value="${item.area || ''}" placeholder="0" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 font-mono font-bold text-sm bg-white focus:ring-2 focus:ring-[#1F7BFF]" oninput="updateQuoteWorkItem(${index}, 'area', this.value)" />
             </div>
 
             <div>
               <label class="block text-[10px] font-bold text-slate-500 mb-0.5">AUTO AMOUNT</label>
-              <div class="flex items-center justify-between px-3 py-1.5 bg-amber-50 rounded-xl border border-amber-200">
-                <span class="font-extrabold font-mono text-amber-900 text-sm">${appState.profile.currency}${formatNumber(amount)}</span>
-                <span class="text-[10px] font-semibold text-amber-700">@${rate}</span>
+              <div class="flex items-center justify-between px-3 py-1.5 bg-blue-50/80 rounded-xl border border-blue-200">
+                <span class="font-extrabold font-mono text-[#1F7BFF] text-sm">${appState.profile.currency}${formatNumber(amount)}</span>
+                <span class="text-[10px] font-semibold text-blue-700">@${rate}</span>
                 <button onclick="removeQuoteWorkItem(${index})" class="text-red-500 hover:text-red-700 ml-1">
                   <i class="fa-solid fa-trash-can text-xs"></i>
                 </button>
@@ -1458,26 +1510,26 @@
 
       filtered.forEach(w => {
         const wrapper = document.createElement('div');
-        wrapper.className = "swipe-container rounded-3xl mb-3 shadow-sm";
+        wrapper.className = "swipe-container rounded-[20px] mb-3 shadow-card";
 
         wrapper.innerHTML = `
           <!-- Delete Panel behind card -->
-          <div class="absolute inset-y-0 right-0 w-28 bg-red-600 rounded-r-3xl flex items-center justify-end pr-4 text-white font-bold text-xs gap-1.5 cursor-pointer" onclick="deleteWorkItem('${w.id}')">
+          <div class="absolute inset-y-0 right-0 w-28 bg-red-600 rounded-r-[20px] flex items-center justify-end pr-4 text-white font-bold text-xs gap-1.5 cursor-pointer" onclick="deleteWorkItem('${w.id}')">
             <i class="fa-solid fa-trash-can"></i>
             <span>Remove</span>
           </div>
 
           <!-- Foreground Swipe Card -->
-          <div class="swipe-card bg-white p-4 rounded-3xl border border-slate-200/80 space-y-2 relative z-10">
+          <div class="swipe-card m3-card p-4 space-y-2 relative z-10">
             <div class="flex justify-between items-start gap-2">
               <h4 class="font-bold text-sm text-slate-900 leading-tight">${escapeHtml(w.name)}</h4>
-              ${w.category ? `<span class="text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200 flex-shrink-0">${escapeHtml(w.category)}</span>` : ''}
+              ${w.category ? `<span class="text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-blue-50 text-[#1F7BFF] border border-blue-100 flex-shrink-0">${escapeHtml(w.category)}</span>` : ''}
             </div>
 
             <p class="text-xs text-slate-500 leading-relaxed font-normal">${escapeHtml(w.desc || '')}</p>
 
             <div class="flex justify-between items-center pt-2 border-t border-slate-100">
-              <span class="font-extrabold text-amber-600 text-xs font-mono">Rate: ${appState.profile.currency}${w.rate ? w.rate : '0'} / sq.ft</span>
+              <span class="font-extrabold text-[#1F7BFF] text-xs font-mono">Rate: ${appState.profile.currency}${w.rate ? w.rate : '0'} / sq.ft</span>
               <div class="flex gap-2">
                 <button onclick="openEditWorkItemModal('${w.id}')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1">
                   <i class="fa-solid fa-pen-to-square text-[10px]"></i>
@@ -1582,17 +1634,17 @@
 
       filtered.forEach(c => {
         const wrapper = document.createElement('div');
-        wrapper.className = "swipe-container rounded-3xl mb-3 shadow-sm";
+        wrapper.className = "swipe-container rounded-[20px] mb-3 shadow-card";
 
         wrapper.innerHTML = `
           <!-- Delete Panel behind card -->
-          <div class="absolute inset-y-0 right-0 w-28 bg-red-600 rounded-r-3xl flex items-center justify-end pr-4 text-white font-bold text-xs gap-1.5 cursor-pointer" onclick="deleteClient('${c.id}')">
+          <div class="absolute inset-y-0 right-0 w-28 bg-red-600 rounded-r-[20px] flex items-center justify-end pr-4 text-white font-bold text-xs gap-1.5 cursor-pointer" onclick="deleteClient('${c.id}')">
             <i class="fa-solid fa-trash-can"></i>
             <span>Remove</span>
           </div>
 
           <!-- Foreground Swipe Card -->
-          <div class="swipe-card bg-white p-4 rounded-3xl border border-slate-200/80 space-y-1.5 relative z-10">
+          <div class="swipe-card m3-card p-4 space-y-1.5 relative z-10">
             <div class="flex justify-between items-start">
               <h4 class="font-bold text-sm text-slate-900 leading-tight">${escapeHtml(c.name)}</h4>
               <div class="flex gap-2">
@@ -1607,7 +1659,7 @@
               </div>
             </div>
 
-            <p class="text-xs text-slate-600 font-medium flex items-center gap-1.5 text-amber-700">
+            <p class="text-xs text-slate-600 font-medium flex items-center gap-1.5 text-[#1F7BFF]">
               <i class="fa-solid fa-phone text-[10px]"></i> ${escapeHtml(c.phone)}
             </p>
 
