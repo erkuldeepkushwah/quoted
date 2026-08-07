@@ -1,6 +1,0 @@
-{
-  "name": "Paint Plus Quotation Maker",
-  "description": "Smart single-page A4 quotation generator with live preview and PDF export",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
