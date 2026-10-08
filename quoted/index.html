@@ -60,15 +60,15 @@
 
   <style>
     :root {
-      --primary: #1F7BFF;
+      --primary: #6236FF;
       --on-primary: #FFFFFF;
       --secondary: #6A1BFF;
-      --background: #F7F9FC;
+      --background: #F8F9FF;
       --surface: #FFFFFF;
       --error: #EF4444;
-      --primary-gradient: linear-gradient(135deg, #1F7BFF 0%, #6A1BFF 100%);
-      --button-gradient: linear-gradient(90deg, #2A7FFF 0%, #7B2CFF 100%);
-      --card-shadow: 0 4px 20px rgba(31, 123, 255, 0.12);
+      --primary-gradient: linear-gradient(135deg, #7C4DFF 0%, #5A1FE0 100%);
+      --button-gradient: linear-gradient(90deg, #7C4DFF 0%, #5A1FE0 100%);
+      --card-shadow: 0 6px 24px rgba(98, 54, 255, 0.12);
       --card-radius: 20px;
     }
 
@@ -184,6 +184,32 @@
       background: #cbd5e1;
       border-radius: 4px;
     }
+
+    /* ===== Purple theme overrides (CSS-only restyle) ===== */
+    .text-\[\#1F7BFF\] { color: #6236FF !important; }
+    .bg-\[\#1F7BFF\] { background-color: #6236FF !important; }
+    .text-\[\#6A1BFF\] { color: #6A1BFF !important; }
+    .bg-\[\#6A1BFF\] { background-color: #6A1BFF !important; }
+    .text-\[\#9CA3AF\] { color: #9AA1B2 !important; }
+
+    .text-blue-100 { color: #E7DEFF !important; }
+    .text-blue-700 { color: #4B22CC !important; }
+    .bg-blue-50 { background-color: #F0EAFF !important; }
+    .bg-blue-100 { background-color: #E4D9FF !important; }
+    .border-blue-100 { border-color: #E4D9FF !important; }
+    .border-blue-200 { border-color: #D6C7FF !important; }
+    .border-blue-300 { border-color: #C4AEFF !important; }
+    .bg-purple-50 { background-color: #F0EAFF !important; }
+    .border-purple-300 { border-color: #C4AEFF !important; }
+    .hover\:border-blue-300:hover { border-color: #C4AEFF !important; }
+    .hover\:border-purple-300:hover { border-color: #C4AEFF !important; }
+
+    .bg-gold { background-color: #6236FF !important; }
+    .hover\:bg-goldhover:hover { background-color: #4B22CC !important; }
+    .text-navdark { color: #6236FF !important; }
+    .bg-navdark { background-color: #6236FF !important; }
+
+    .m3-card { border-color: rgba(98, 54, 255, 0.08); }
   </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans text-slate-800 pb-16 sm:pb-20">
