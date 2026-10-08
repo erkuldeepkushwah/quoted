@@ -60,15 +60,15 @@
 
   <style>
     :root {
-      --primary: #1F7BFF;
+      --primary: #6236FF;
       --on-primary: #FFFFFF;
       --secondary: #6A1BFF;
-      --background: #F7F9FC;
+      --background: #F4F6FC;
       --surface: #FFFFFF;
       --error: #EF4444;
-      --primary-gradient: linear-gradient(135deg, #1F7BFF 0%, #6A1BFF 100%);
-      --button-gradient: linear-gradient(90deg, #2A7FFF 0%, #7B2CFF 100%);
-      --card-shadow: 0 4px 20px rgba(31, 123, 255, 0.12);
+      --primary-gradient: linear-gradient(135deg, #7C4DFF 0%, #5A1FE0 100%);
+      --button-gradient: linear-gradient(90deg, #7C4DFF 0%, #5A1FE0 100%);
+      --card-shadow: 0 6px 22px rgba(98, 54, 255, 0.10);
       --card-radius: 20px;
     }
 
@@ -184,39 +184,31 @@
       background: #cbd5e1;
       border-radius: 4px;
     }
+
+    /* ===== Purple accent theme (photo match) ===== */
+    .text-\[\#1F7BFF\] { color: #6236FF !important; }
+    .bg-\[\#1F7BFF\] { background-color: #6236FF !important; }
+    .border-\[\#1F7BFF\] { border-color: #6236FF !important; }
+    .text-blue-100 { color: #E7DEFF !important; }
+    .text-blue-700 { color: #4B22CC !important; }
+    .bg-blue-50 { background-color: #F0EAFF !important; }
+    .bg-blue-100 { background-color: #E4D9FF !important; }
+    .border-blue-100 { border-color: #E4D9FF !important; }
+    .border-blue-200 { border-color: #D6C7FF !important; }
+    .border-blue-300 { border-color: #C4AEFF !important; }
+    .bg-purple-50 { background-color: #F0EAFF !important; }
+    .border-purple-300 { border-color: #C4AEFF !important; }
+    .hover\:border-blue-300:hover { border-color: #C4AEFF !important; }
+    .hover\:border-purple-300:hover { border-color: #C4AEFF !important; }
+    .bg-gold { background-color: #6236FF !important; }
+    .hover\:bg-goldhover:hover { background-color: #4B22CC !important; }
+    .text-navdark { color: #6236FF !important; }
+    .bg-navdark { background-color: #6236FF !important; }
+    .m3-card { border-color: rgba(98, 54, 255, 0.07); }
   </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans text-slate-800 pb-16 sm:pb-20">
 
-  <!-- TOP HEADER APP BAR -->
-  <header class="bg-primary-gradient text-white sticky top-0 z-40 shadow-md">
-    <div class="max-w-2xl mx-auto px-3 py-2 flex items-center justify-between">
-      
-      <!-- Left Info -->
-      <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md text-white flex items-center justify-center font-bold text-lg shadow-sm border border-white/30 overflow-hidden p-0.5 flex-shrink-0">
-          <img src="https://uploads.onecompiler.io/44pbfr3gy/1786090529811/ChatGPT%20Image%20Aug%207,%202026,%2001_36_19%20PM.png" alt="Dashboard Logo" class="w-full h-full object-contain rounded-lg" />
-        </div>
-        <div>
-          <h1 id="app-bar-title" class="font-display font-extrabold text-sm sm:text-base leading-tight tracking-tight text-white">
-            Dashboard
-          </h1>
-          <p id="app-bar-subtitle" class="text-[10px] sm:text-[11px] text-blue-100">
-            Select Client & Rate Table
-          </p>
-        </div>
-      </div>
-
-      <!-- Right Action Buttons -->
-      <div class="flex items-center gap-2">
-        <button onclick="triggerPrint()" class="px-3.5 py-1.5 rounded-xl bg-button-gradient text-white font-extrabold text-xs flex items-center gap-1.5 shadow transition active:scale-95">
-          <i class="fa-solid fa-print"></i>
-          <span>Print</span>
-        </button>
-      </div>
-
-    </div>
-  </header>
 
   <!-- MAIN CONTAINER (CONTAINING ALL SCREEN VIEWS) -->
   <main class="max-w-2xl w-full mx-auto p-2.5 sm:p-4 flex-1 space-y-3">
@@ -243,10 +235,6 @@
             </div>
           </div>
 
-          <button onclick="switchTab('quotation')" class="px-4 py-2 rounded-xl bg-button-gradient text-white font-extrabold text-xs flex items-center gap-1.5 shadow-lg active:scale-95 transition">
-            <i class="fa-solid fa-plus"></i>
-            <span>+ Quote</span>
-          </button>
         </div>
 
         <!-- 2 Stat Boxes -->
@@ -272,7 +260,6 @@
             <i class="fa-solid fa-file-invoice"></i>
           </div>
           <span class="font-bold text-xs text-slate-800 leading-tight">Create Quotation</span>
-          <span class="text-[10px] text-slate-400 font-medium">Rate & Sq.Ft</span>
         </button>
 
         <button onclick="switchTab('item', 'clients')" class="m3-card p-3.5 flex flex-col items-center text-center space-y-1.5 hover:border-purple-300 transition active:scale-95">
@@ -280,7 +267,6 @@
             <i class="fa-solid fa-user-group"></i>
           </div>
           <span class="font-bold text-xs text-slate-800 leading-tight">Clients</span>
-          <span id="dash-quick-clients-count" class="text-[10px] text-slate-400 font-medium">1 Saved</span>
         </button>
 
         <button onclick="switchTab('item', 'work')" class="m3-card p-3.5 flex flex-col items-center text-center space-y-1.5 hover:border-blue-300 transition active:scale-95">
@@ -288,7 +274,6 @@
             <i class="fa-solid fa-layer-group"></i>
           </div>
           <span class="font-bold text-xs text-slate-800 leading-tight">Work Items</span>
-          <span id="dash-quick-items-count" class="text-[10px] text-slate-400 font-medium">4 Rates</span>
         </button>
       </div>
 
@@ -1093,6 +1078,7 @@
     function renderHeaderTitles() {
       const titleEl = document.getElementById('app-bar-title');
       const subEl = document.getElementById('app-bar-subtitle');
+      if (!titleEl || !subEl) return;
 
       if (appState.activeTab === 'home') {
         titleEl.innerText = "Dashboard";
@@ -1217,8 +1203,10 @@
       document.getElementById('dash-business-name').innerText = appState.profile.name || "PAINT PLUS";
       document.getElementById('dash-business-phone').innerText = appState.profile.phone || "";
 
-      document.getElementById('dash-quick-clients-count').innerText = `${appState.clients.length} Saved`;
-      document.getElementById('dash-quick-items-count').innerText = `${appState.workItems.length} Rates`;
+      const qcc = document.getElementById('dash-quick-clients-count');
+      const qic = document.getElementById('dash-quick-items-count');
+      if (qcc) qcc.innerText = `${appState.clients.length} Saved`;
+      if (qic) qic.innerText = `${appState.workItems.length} Rates`;
 
       // Calculate Total Quote Value across quotations
       let totalVal = 0;
@@ -1265,9 +1253,6 @@
               </div>
               <div class="flex items-center gap-2">
                 <span class="font-black font-mono text-base text-[#1F7BFF]">${appState.profile.currency}${formatNumber(total)}</span>
-                <button onclick="deleteQuotation('${q.id}')" title="Delete quotation" class="w-7 h-7 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center text-xs">
-                  <i class="fa-solid fa-trash-can"></i>
-                </button>
               </div>
             </div>
 
@@ -1276,13 +1261,9 @@
               <p class="text-xs text-slate-400 font-medium">${q.items.length} Work Items • Date: ${q.date}</p>
             </div>
 
-            <div class="flex gap-2 pt-1">
-              <button onclick="editSavedQuotation('${q.id}')" class="flex-1 py-2 rounded-xl bg-button-gradient text-white font-extrabold text-xs shadow transition active:scale-95">
-                Open & Edit
-              </button>
-              <button onclick="deleteQuotation('${q.id}')" class="px-3 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs transition flex items-center gap-1">
-                <i class="fa-solid fa-trash-can"></i>
-                <span>Remove</span>
+            <div class="pt-1">
+              <button onclick="editSavedQuotation('${q.id}')" class="w-full py-2.5 rounded-xl bg-button-gradient text-white font-extrabold text-xs shadow transition active:scale-95">
+                Edit
               </button>
             </div>
           </div>
@@ -1711,16 +1692,6 @@
           <div class="swipe-card m3-card p-4 space-y-1.5 relative z-10">
             <div class="flex justify-between items-start">
               <h4 class="font-bold text-sm text-slate-900 leading-tight">${escapeHtml(c.name)}</h4>
-              <div class="flex gap-2">
-                <button onclick="openEditClientModal('${c.id}')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1">
-                  <i class="fa-solid fa-pen-to-square text-[10px]"></i>
-                  <span>Edit</span>
-                </button>
-                <button onclick="deleteClient('${c.id}')" class="px-2.5 py-1 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold flex items-center gap-1">
-                  <i class="fa-solid fa-trash-can text-[10px]"></i>
-                  <span>Remove</span>
-                </button>
-              </div>
             </div>
 
             <p class="text-xs text-slate-600 font-medium flex items-center gap-1.5 text-[#1F7BFF]">
