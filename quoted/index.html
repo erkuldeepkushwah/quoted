@@ -393,11 +393,17 @@
           </div>
         </div>
 
-        <!-- Save Button -->
-        <button onclick="saveQuotation()" class="w-full py-3.5 rounded-2xl bg-button-gradient text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg transition active:scale-95">
-          <i class="fa-solid fa-floppy-disk text-base"></i>
-          <span>Save Quotation</span>
-        </button>
+        <!-- Print / PDF + Save Buttons -->
+        <div class="flex gap-2">
+          <button onclick="triggerPrint()" class="flex-1 py-3.5 rounded-2xl bg-white/15 backdrop-blur-md border border-white/30 text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg transition active:scale-95">
+            <i class="fa-solid fa-print text-base"></i>
+            <span>Print / PDF</span>
+          </button>
+          <button onclick="saveQuotation()" class="flex-1 py-3.5 rounded-2xl bg-button-gradient text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg transition active:scale-95">
+            <i class="fa-solid fa-floppy-disk text-base"></i>
+            <span>Save Quotation</span>
+          </button>
+        </div>
       </div>
 
     </section>
