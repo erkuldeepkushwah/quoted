@@ -390,7 +390,7 @@
 
         <div id="quote-items-container" class="space-y-3"></div>
 
-        <button onclick="addQuoteWorkItem()" class="w-full py-2.5 rounded-xl text-[#6236FF] font-bold text-sm flex items-center justify-center gap-1.5 hover:bg-[#F0EAFF] transition">
+        <button onclick="openQuoteWorkPage(-1)" class="w-full py-2.5 rounded-xl text-[#6236FF] font-bold text-sm flex items-center justify-center gap-1.5 hover:bg-[#F0EAFF] transition">
           <i class="fa-solid fa-plus text-xs"></i> Add Another Work Item
         </button>
       </div>
@@ -495,13 +495,6 @@
 
     <!-- ==================== VIEW 4: MORE / BUSINESS SETTINGS ==================== -->
     <section id="view-more" class="space-y-4 hidden">
-
-      <!-- TOP NAV BAR -->
-      <div class="sticky top-0 z-30 -mx-2.5 sm:-mx-4 -mt-2.5 sm:-mt-4 mb-1 bg-white border-b border-slate-100 shadow-sm">
-        <div class="max-w-2xl mx-auto px-3 py-2.5">
-          <span class="font-bold text-slate-800 text-sm">More</span>
-        </div>
-      </div>
       
       <div class="m3-card p-5 space-y-4">
         <div class="flex items-center gap-2 pb-2 border-b border-slate-100">
@@ -665,42 +658,116 @@
   </div>
 
   <!-- MODAL 2: ADD / EDIT CLIENT -->
-  <div id="modal-client" class="fixed inset-0 z-30 bg-[#F4F6FC] overflow-y-auto hidden">
+  <div id="modal-client" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+        <h3 id="modal-client-title" class="font-extrabold text-slate-800 text-sm">Add New Client</h3>
+        <button onclick="closeClientModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleSaveClient(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="modal-client-id" />
+        
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Client Name *</label>
+          <input type="text" id="modal-client-name" required placeholder="e.g. Sunil Kumawat" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-medium" />
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Phone Number *</label>
+          <input type="text" id="modal-client-phone" required placeholder="e.g. 9622222854" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-medium" />
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Project Address / Site</label>
+          <textarea id="modal-client-address" rows="2" placeholder="e.g. kanak Avenue (Ankush ji)" class="w-full p-2.5 rounded-xl border border-slate-300 font-medium"></textarea>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Website (Optional)</label>
+          <input type="text" id="modal-client-gst" placeholder="e.g. www.clientwebsite.com" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-mono" />
+        </div>
+
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeClientModal()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-600 font-bold">Cancel</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-gold hover:bg-goldhover text-navdark font-black shadow">Save Client</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FULL-SCREEN: ADD / EDIT QUOTATION WORK ITEM -->
+  <div id="modal-quote-work" class="fixed inset-0 z-30 bg-[#F4F6FC] overflow-y-auto hidden">
     <div class="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-sm">
       <div class="max-w-2xl mx-auto px-3 py-2.5 flex items-center justify-between">
         <div class="flex items-center gap-1.5">
-          <button type="button" onclick="closeClientModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100 active:scale-95 transition">
+          <button type="button" onclick="closeQuoteWorkPage()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100 active:scale-95 transition">
             <i class="fa-solid fa-arrow-left"></i>
           </button>
-          <span id="modal-client-title" class="font-bold text-slate-800 text-sm">Add Client</span>
+          <span id="qw-title" class="font-bold text-slate-800 text-sm">Add Work</span>
         </div>
-        <button type="submit" form="client-form" class="px-4 py-1.5 rounded-full bg-[#6236FF] text-white font-bold text-xs active:scale-95 transition">Add</button>
+        <button type="button" onclick="saveQuoteWorkPage()" class="px-4 py-1.5 rounded-full bg-[#6236FF] text-white font-bold text-xs active:scale-95 transition">Add</button>
       </div>
     </div>
 
     <div class="max-w-2xl mx-auto p-3 sm:p-4 pb-28 space-y-4">
-      <form id="client-form" onsubmit="handleSaveClient(event)" class="space-y-4">
-        <input type="hidden" id="modal-client-id" />
+      <div class="m3-card p-4 space-y-3">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center">2</span>
+          <span class="font-extrabold text-xs tracking-wider text-slate-800 uppercase">Work Details</span>
+        </div>
+        <div id="qw-category-chips" class="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1"></div>
+      </div>
 
-        <div class="m3-card p-4 space-y-3 text-xs">
+      <div class="m3-card p-4 space-y-3 text-xs">
+        <div>
+          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Work Name</label>
+          <select id="qw-work-select" onchange="onQuoteWorkNameChange()" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-semibold"></select>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Rate (&#8377; per sq.ft)</label>
+          <input type="number" step="any" id="qw-rate" class="w-full px-3 py-2 rounded-xl border-2 border-[#6236FF] font-mono font-bold text-sm" oninput="updateQuoteWorkCalc()" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Client Name</label>
-            <input type="text" id="modal-client-name" required placeholder="e.g. Sunil Kumawat" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-medium" />
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Enter Area (Sq.Ft)</label>
+            <input type="text" id="qw-area" inputmode="decimal" placeholder="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono font-bold text-sm" oninput="updateQuoteWorkCalc()" />
           </div>
           <div>
-            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Phone</label>
-            <input type="text" id="modal-client-phone" required placeholder="e.g. 9622222854" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-medium" />
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Address</label>
-            <textarea id="modal-client-address" rows="2" placeholder="e.g. kanak Avenue (Ankush ji)" class="w-full p-2.5 rounded-xl border border-slate-200 font-medium"></textarea>
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Website / GST</label>
-            <input type="text" id="modal-client-gst" placeholder="e.g. www.clientwebsite.com" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono" />
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Amount</label>
+            <div class="px-3 py-2 bg-slate-100 rounded-xl border border-slate-200 flex items-center justify-between">
+              <span id="qw-amount" class="font-extrabold font-mono text-[#6236FF] text-sm">&#8377;0</span>
+              <span id="qw-rate-suffix" class="text-[10px] font-semibold text-slate-500">@0</span>
+            </div>
           </div>
         </div>
-      </form>
+        <div class="flex items-center justify-between pt-1">
+          <span id="qw-ref" class="text-[11px] text-slate-400">Item reference #WI-00</span>
+          <button type="button" onclick="deleteQuoteWorkFromPage()" class="w-8 h-8 rounded-lg bg-slate-100 text-red-500 hover:bg-red-50 flex items-center justify-center">
+            <i class="fa-solid fa-trash-can text-xs"></i>
+          </button>
+        </div>
+      </div>
+
+      <button type="button" onclick="saveQuoteWorkAndAnother()" class="w-full py-3 rounded-2xl bg-[#6236FF] text-white font-bold text-sm flex items-center justify-center gap-1.5 active:scale-95 transition shadow">
+        <i class="fa-solid fa-plus text-xs"></i> Add Another Service
+      </button>
+
+      <div class="text-white rounded-[20px] p-5 space-y-4 shadow-card" style="background: linear-gradient(135deg, #6B3ABA 0%, #4A1C93 100%);">
+        <h3 class="font-extrabold text-xs tracking-wider text-blue-100 uppercase">Summary Totals</h3>
+        <div class="space-y-2 text-xs">
+          <div class="flex justify-between items-center text-blue-100">
+            <span id="qw-subtotal-label">Subtotal (0 items):</span>
+            <span id="qw-subtotal-val" class="font-bold font-mono text-white text-sm">&#8377;0</span>
+          </div>
+          <div class="flex justify-between items-center pt-2">
+            <span class="font-black text-lg text-white">Grand Total:</span>
+            <span id="qw-grand-total-val" class="font-black font-mono text-2xl text-white">&#8377;0</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1222,7 +1289,7 @@
       let total = 0;
       q.items.forEach(item => {
         const workItem = appState.workItems.find(w => w.id === item.workId) || { rate: 0 };
-        total += (item.area || 0) * (workItem.rate || 0);
+        total += (item.area || 0) * itemRate(item);
       });
       return total;
     }
@@ -1349,7 +1416,7 @@
 
       q.items.forEach((item, index) => {
         const workItem = appState.workItems.find(w => w.id === item.workId) || { name: 'Custom Work Item', rate: 0 };
-        const rate = workItem.rate || 0;
+        const rate = itemRate(item);
         const area = item.area || 0;
         const amount = area * rate;
         subtotal += amount;
@@ -1376,7 +1443,7 @@
             <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center flex-shrink-0">
               ${index + 1}
             </span>
-            <select class="flex-1 px-3 py-2 rounded-xl border border-slate-300 bg-white font-semibold text-xs text-slate-800 focus:ring-2 focus:ring-[#6236FF]" onchange="updateQuoteWorkItem(${index}, 'workId', this.value)">
+            <select class="flex-1 px-3 py-2 rounded-xl border border-slate-300 bg-white font-semibold text-xs text-slate-800 focus:ring-2 focus:ring-[#6236FF]" onclick="event.stopPropagation()" onchange="updateQuoteWorkItem(${index}, 'workId', this.value)">
               ${workOptionsHtml}
             </select>
           </div>
@@ -1384,7 +1451,7 @@
           <div class="flex items-end gap-2 pt-1">
             <div class="flex-1">
               <label class="block text-[10px] font-bold text-slate-500 mb-0.5">ENTER AREA (SQ.FT)</label>
-              <input type="text" inputmode="decimal" pattern="[0-9.]*" value="${item.area !== undefined && item.area !== null && item.area !== 0 ? item.area : (item.area === 0 ? '' : item.area)}" placeholder="0" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 font-mono font-bold text-sm bg-white focus:ring-2 focus:ring-[#6236FF]" oninput="updateQuoteWorkItem(${index}, 'area', this.value, this)" />
+              <input type="text" inputmode="decimal" pattern="[0-9.]*" value="${item.area !== undefined && item.area !== null && item.area !== 0 ? item.area : (item.area === 0 ? '' : item.area)}" placeholder="0" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 font-mono font-bold text-sm bg-white focus:ring-2 focus:ring-[#6236FF]" onclick="event.stopPropagation()" oninput="updateQuoteWorkItem(${index}, 'area', this.value, this)" />
             </div>
 
             <div class="flex-1">
@@ -1395,12 +1462,14 @@
               </div>
             </div>
 
-            <button onclick="removeQuoteWorkItem(${index})" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-red-500 hover:text-red-700 flex items-center justify-center flex-shrink-0">
+            <button onclick="event.stopPropagation(); removeQuoteWorkItem(${index})" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-red-500 hover:text-red-700 flex items-center justify-center flex-shrink-0">
               <i class="fa-solid fa-trash-can text-xs"></i>
             </button>
           </div>
         `;
 
+        row.style.cursor = 'pointer';
+        row.onclick = () => openQuoteWorkPage(index);
         itemsContainer.appendChild(row);
       });
 
@@ -1518,7 +1587,7 @@
       const item = appState.currentQuote.items[index];
       if (!item) return;
       const workItem = appState.workItems.find(w => w.id === item.workId) || { name: 'Custom Work Item', rate: 0 };
-      const rate = workItem.rate || 0;
+      const rate = itemRate(item);
       const numArea = parseFloat(item.area) || 0;
       const amount = numArea * rate;
 
@@ -1538,7 +1607,7 @@
       let subtotal = 0;
       q.items.forEach(item => {
         const workItem = appState.workItems.find(w => w.id === item.workId) || { rate: 0 };
-        const rate = workItem.rate || 0;
+        const rate = itemRate(item);
         const numArea = parseFloat(item.area) || 0;
         subtotal += numArea * rate;
       });
@@ -1773,10 +1842,138 @@
       });
     }
 
+    // QUOTATION WORK ITEM FULL-SCREEN PAGE
+    let qwEditingIndex = -1;
+
+    function itemRate(item) {
+      if (item && item.rateOverride !== undefined && item.rateOverride !== null && item.rateOverride !== '') {
+        return parseFloat(item.rateOverride) || 0;
+      }
+      const w = appState.workItems.find(x => x.id === item.workId) || { rate: 0 };
+      return w.rate || 0;
+    }
+
+    function openQuoteWorkPage(index) {
+      qwEditingIndex = (typeof index === 'number') ? index : -1;
+      const q = appState.currentQuote;
+      const item = qwEditingIndex >= 0 ? q.items[qwEditingIndex] : null;
+
+      document.getElementById('qw-title').innerText = item ? 'Edit Work' : 'Add Work';
+
+      const sel = document.getElementById('qw-work-select');
+      sel.innerHTML = appState.workItems.map(w =>
+        `<option value="${w.id}">${escapeHtml(w.name)} (${appState.profile.currency}${w.rate}/sq.ft)</option>`
+      ).join('');
+      if (item && item.workId) sel.value = item.workId;
+
+      const wsel = appState.workItems.find(w => w.id === sel.value) || { rate: 0 };
+      document.getElementById('qw-rate').value = (item && item.rateOverride !== undefined) ? item.rateOverride : (wsel.rate || 0);
+      document.getElementById('qw-area').value = (item && item.area) ? item.area : '';
+
+      const n = (qwEditingIndex >= 0 ? qwEditingIndex : q.items.length) + 1;
+      document.getElementById('qw-ref').innerText = `Item reference #WI-${String(n).padStart(2, '0')}`;
+
+      renderQuoteWorkChips();
+      updateQuoteWorkCalc();
+      renderQuoteWorkSummary();
+      setFabVisible(false);
+      document.getElementById('modal-quote-work').classList.remove('hidden');
+    }
+
+    function closeQuoteWorkPage() {
+      document.getElementById('modal-quote-work').classList.add('hidden');
+      setFabVisible(true);
+    }
+
+    function renderQuoteWorkChips() {
+      const wrap = document.getElementById('qw-category-chips');
+      if (!wrap) return;
+      const cats = Array.from(new Set(appState.workItems.map(w => (w.category || '').trim()).filter(Boolean)));
+      const list = cats.length ? cats : ['Painting', 'Waterproofing', 'Texturing'];
+      const selId = document.getElementById('qw-work-select').value;
+      const cur = ((appState.workItems.find(w => w.id === selId) || {}).category || '').toUpperCase();
+      wrap.innerHTML = list.map(c => {
+        const active = c.toUpperCase() === cur;
+        const label = c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
+        return `<button type="button" onclick="filterQuoteWorkByCategory('${escapeHtml(c)}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition ${active ? 'bg-[#6236FF] text-white shadow' : 'bg-slate-100 text-slate-600'}">${escapeHtml(label)}</button>`;
+      }).join('');
+    }
+
+    function filterQuoteWorkByCategory(cat) {
+      const first = appState.workItems.find(w => (w.category || '').toUpperCase() === cat.toUpperCase());
+      if (!first) return;
+      document.getElementById('qw-work-select').value = first.id;
+      onQuoteWorkNameChange();
+    }
+
+    function onQuoteWorkNameChange() {
+      const sel = document.getElementById('qw-work-select');
+      const w = appState.workItems.find(x => x.id === sel.value) || { rate: 0 };
+      document.getElementById('qw-rate').value = w.rate || 0;
+      renderQuoteWorkChips();
+      updateQuoteWorkCalc();
+    }
+
+    function updateQuoteWorkCalc() {
+      const rate = parseFloat(document.getElementById('qw-rate').value) || 0;
+      const area = parseFloat(document.getElementById('qw-area').value) || 0;
+      const amt = rate * area;
+      const a = document.getElementById('qw-amount');
+      const sfx = document.getElementById('qw-rate-suffix');
+      if (a) a.innerText = `${appState.profile.currency}${formatNumber(amt)}`;
+      if (sfx) sfx.innerText = `@${rate}`;
+    }
+
+    function renderQuoteWorkSummary() {
+      const q = appState.currentQuote;
+      let sub = 0;
+      (q.items || []).forEach(it => { sub += (parseFloat(it.area) || 0) * itemRate(it); });
+      const l = document.getElementById('qw-subtotal-label');
+      const v = document.getElementById('qw-subtotal-val');
+      const g = document.getElementById('qw-grand-total-val');
+      if (l) l.innerText = `Subtotal (${(q.items || []).length} items):`;
+      if (v) v.innerText = `${appState.profile.currency}${formatNumber(sub)}`;
+      if (g) g.innerText = `${appState.profile.currency}${formatNumber(sub)}`;
+    }
+
+    function commitQuoteWork() {
+      const sel = document.getElementById('qw-work-select');
+      const rate = parseFloat(document.getElementById('qw-rate').value) || 0;
+      const area = parseFloat(document.getElementById('qw-area').value) || 0;
+      if (!sel.value) { alert('Please add a work item first.'); return false; }
+      const q = appState.currentQuote;
+      const entry = { workId: sel.value, area: area, customName: '', rateOverride: rate };
+      if (qwEditingIndex >= 0) q.items[qwEditingIndex] = entry;
+      else q.items.push(entry);
+      saveLocalStorage();
+      return true;
+    }
+
+    function saveQuoteWorkPage() {
+      if (!commitQuoteWork()) return;
+      renderQuotationBuilder();
+      closeQuoteWorkPage();
+    }
+
+    function saveQuoteWorkAndAnother() {
+      if (!commitQuoteWork()) return;
+      renderQuotationBuilder();
+      openQuoteWorkPage(-1);
+    }
+
+    function deleteQuoteWorkFromPage() {
+      if (qwEditingIndex >= 0) {
+        if (appState.currentQuote.items.length <= 1) { alert('Quotation must have at least 1 work item.'); return; }
+        appState.currentQuote.items.splice(qwEditingIndex, 1);
+        saveLocalStorage();
+      }
+      renderQuotationBuilder();
+      closeQuoteWorkPage();
+    }
+
     // CLIENT MODAL HANDLERS
     function openAddClientModal() {
-      setFabVisible(false);
-      document.getElementById('modal-client-title').innerText = "Add Client";
+      document.getElementById('modal-client-title').innerText = "Add New Client";
       document.getElementById('modal-client-id').value = "";
       document.getElementById('modal-client-name').value = "";
       document.getElementById('modal-client-phone').value = "";
@@ -1789,7 +1986,6 @@
       const client = appState.clients.find(c => c.id === id);
       if (!client) return;
 
-      setFabVisible(false);
       document.getElementById('modal-client-title').innerText = "Edit Client";
       document.getElementById('modal-client-id').value = client.id;
       document.getElementById('modal-client-name').value = client.name;
@@ -1801,7 +1997,6 @@
 
     function closeClientModal() {
       document.getElementById('modal-client').classList.add('hidden');
-      setFabVisible(true);
     }
 
     function handleSaveClient(e) {
@@ -1940,7 +2135,7 @@
       q.items.forEach((item, idx) => {
         const workItem = appState.workItems.find(w => w.id === item.workId) || { name: 'Work Item', rate: 0 };
         const name = item.customName || workItem.name;
-        const rate = workItem.rate || 0;
+        const rate = itemRate(item);
         const area = item.area || 0;
         const amount = area * rate;
         grandTotal += amount;
