@@ -377,12 +377,12 @@
         </div>
         <div>
           <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Rate (&#8377; per sq.ft)</label>
-          <input type="number" step="any" id="qw-rate" readonly tabindex="-1" class="w-full px-3 py-2 rounded-xl border-[3px] border-[#6236FF] bg-white font-mono font-bold text-sm" />
+          <input type="number" step="any" id="qw-rate" readonly tabindex="-1" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-100 font-mono font-bold text-sm" />
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Enter Area (Sq.Ft)</label>
-            <input type="number" step="any" min="0" id="qw-area" placeholder="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-100 font-mono font-bold text-sm" oninput="updateQuoteWorkCalc()" />
+            <input type="number" step="any" min="0" id="qw-area" placeholder="Enter area" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-mono font-bold text-sm placeholder:text-slate-400 placeholder:font-sans placeholder:font-normal focus:ring-2 focus:ring-[#6236FF] focus:border-[#6236FF]" oninput="updateQuoteWorkCalc()" />
           </div>
           <div>
             <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Amount</label>
