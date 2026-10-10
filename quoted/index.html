@@ -704,19 +704,19 @@
       <div class="max-w-2xl mx-auto px-3 py-2.5 flex items-center justify-between">
         <div class="flex items-center gap-1.5">
           <button type="button" onclick="closeQuoteWorkPage()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100 active:scale-95 transition">
-            <i class="fa-solid fa-arrow-left"></i>
+            <i class="fa-solid fa-chevron-left"></i>
           </button>
           <span id="qw-title" class="font-bold text-slate-800 text-sm">Add Work</span>
         </div>
-        <button type="button" onclick="saveQuoteWorkPage()" class="px-4 py-1.5 rounded-full bg-[#6236FF] text-white font-bold text-xs active:scale-95 transition">Add</button>
+        <button type="button" onclick="saveQuoteWorkPage()" class="px-2 py-1 text-[#6236FF] font-extrabold text-sm active:scale-95 transition">Add</button>
       </div>
     </div>
 
     <div class="max-w-2xl mx-auto p-3 sm:p-4 pb-28 space-y-4">
       <div class="m3-card p-4 space-y-3">
         <div class="flex items-center gap-2">
-          <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center">2</span>
-          <span class="font-extrabold text-xs tracking-wider text-slate-800 uppercase">Work Details</span>
+          <span class="w-6 h-6 rounded-full bg-slate-700 text-white font-bold text-xs flex items-center justify-center">2</span>
+          <span class="font-extrabold text-xs tracking-wider text-slate-900 uppercase">Work Details</span>
         </div>
         <div id="qw-category-chips" class="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1"></div>
       </div>
@@ -724,16 +724,19 @@
       <div class="m3-card p-4 space-y-3 text-xs">
         <div>
           <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Work Name</label>
-          <select id="qw-work-select" onchange="onQuoteWorkNameChange()" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-semibold"></select>
+          <div class="relative">
+            <select id="qw-work-select" onchange="onQuoteWorkNameChange()" class="w-full px-3 py-2 pr-8 rounded-xl border border-slate-200 bg-white font-semibold appearance-none"></select>
+            <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+          </div>
         </div>
         <div>
           <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Rate (&#8377; per sq.ft)</label>
-          <input type="number" step="any" id="qw-rate" class="w-full px-3 py-2 rounded-xl border-2 border-[#6236FF] font-mono font-bold text-sm" oninput="updateQuoteWorkCalc()" />
+          <input type="number" step="any" id="qw-rate" class="w-full px-3 py-2 rounded-xl border-[3px] border-[#6236FF] font-mono font-bold text-sm" oninput="updateQuoteWorkCalc()" />
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Enter Area (Sq.Ft)</label>
-            <input type="text" id="qw-area" inputmode="decimal" placeholder="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono font-bold text-sm" oninput="updateQuoteWorkCalc()" />
+            <input type="text" id="qw-area" inputmode="decimal" placeholder="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-100 font-mono font-bold text-sm" oninput="updateQuoteWorkCalc()" />
           </div>
           <div>
             <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Amount</label>
@@ -756,9 +759,9 @@
       </button>
 
       <div class="text-white rounded-[20px] p-5 space-y-4 shadow-card" style="background: linear-gradient(135deg, #6B3ABA 0%, #4A1C93 100%);">
-        <h3 class="font-extrabold text-xs tracking-wider text-blue-100 uppercase">Summary Totals</h3>
+        <h3 class="font-extrabold text-xs tracking-wider text-white/90 uppercase">Summary Totals</h3>
         <div class="space-y-2 text-xs">
-          <div class="flex justify-between items-center text-blue-100">
+          <div class="flex justify-between items-center text-white/90">
             <span id="qw-subtotal-label">Subtotal (0 items):</span>
             <span id="qw-subtotal-val" class="font-bold font-mono text-white text-sm">&#8377;0</span>
           </div>
@@ -766,6 +769,15 @@
             <span class="font-black text-lg text-white">Grand Total:</span>
             <span id="qw-grand-total-val" class="font-black font-mono text-2xl text-white">&#8377;0</span>
           </div>
+        </div>
+
+        <div class="flex gap-2">
+          <button type="button" onclick="triggerPrint()" class="flex-1 py-3 rounded-2xl border border-white/60 bg-white/10 text-white font-bold text-sm flex items-center justify-center gap-2 active:scale-95 transition">
+            <i class="fa-solid fa-file-pdf"></i> PDF
+          </button>
+          <button type="button" onclick="saveQuotation(); closeQuoteWorkPage();" class="flex-1 py-3 rounded-2xl bg-[#7C4DFF] text-white font-black text-sm flex items-center justify-center gap-2 active:scale-95 transition shadow">
+            <i class="fa-solid fa-download"></i> Save Quote
+          </button>
         </div>
       </div>
     </div>
@@ -1877,12 +1889,27 @@
       updateQuoteWorkCalc();
       renderQuoteWorkSummary();
       setFabVisible(false);
+      setNavActiveForPage('quotation');
       document.getElementById('modal-quote-work').classList.remove('hidden');
     }
 
     function closeQuoteWorkPage() {
       document.getElementById('modal-quote-work').classList.add('hidden');
       setFabVisible(true);
+      setNavActiveForPage(appState.activeTab);
+    }
+
+    function setNavActiveForPage(tab) {
+      ['home', 'quotation', 'item', 'more'].forEach(t => {
+        const btn = document.getElementById(`nav-btn-${t}`);
+        const ind = document.getElementById(`nav-indicator-${t}`);
+        if (!btn) return;
+        const on = (t === tab);
+        btn.className = on
+          ? "relative flex flex-col items-center justify-center gap-0.5 text-[#1F7BFF]"
+          : "relative flex flex-col items-center justify-center gap-0.5 text-[#9CA3AF] hover:text-slate-600";
+        if (ind) ind.classList.toggle('hidden', !on);
+      });
     }
 
     function renderQuoteWorkChips() {
