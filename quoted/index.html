@@ -495,6 +495,13 @@
 
     <!-- ==================== VIEW 4: MORE / BUSINESS SETTINGS ==================== -->
     <section id="view-more" class="space-y-4 hidden">
+
+      <!-- TOP NAV BAR -->
+      <div class="sticky top-0 z-30 -mx-2.5 sm:-mx-4 -mt-2.5 sm:-mt-4 mb-1 bg-white border-b border-slate-100 shadow-sm">
+        <div class="max-w-2xl mx-auto px-3 py-2.5">
+          <span class="font-bold text-slate-800 text-sm">More</span>
+        </div>
+      </div>
       
       <div class="m3-card p-5 space-y-4">
         <div class="flex items-center gap-2 pb-2 border-b border-slate-100">
@@ -610,89 +617,129 @@
   </nav>
 
   <!-- FLOATING ACTION BUTTON (FAB) -->
-  <button onclick="switchTab('quotation')" title="Create New Quotation" class="m3-fab fixed bottom-16 right-4 z-40 w-12 h-12 rounded-full flex items-center justify-center text-white text-lg shadow-xl hover:scale-105 active:scale-95 transition-all">
+  <button onclick="switchTab('quotation')" title="Create New Quotation" id="main-fab" class="m3-fab fixed bottom-16 right-4 z-40 w-12 h-12 rounded-full flex items-center justify-center text-white text-lg shadow-xl hover:scale-105 active:scale-95 transition-all">
     <i class="fa-solid fa-plus text-white"></i>
   </button>
 
   <!-- ==================== MODALS ==================== -->
 
   <!-- MODAL 1: ADD / EDIT WORK ITEM -->
-  <div id="modal-work-item" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-        <h3 id="modal-work-title" class="font-extrabold text-slate-800 text-sm">Add New Work Item</h3>
-        <button onclick="closeWorkItemModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+  <div id="modal-work-item" class="fixed inset-0 z-30 bg-[#F4F6FC] overflow-y-auto hidden">
+    <div class="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-sm">
+      <div class="max-w-2xl mx-auto px-3 py-2.5 flex items-center justify-between">
+        <div class="flex items-center gap-1.5">
+          <button type="button" onclick="closeWorkItemModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100 active:scale-95 transition">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <span id="modal-work-title" class="font-bold text-slate-800 text-sm">Add Work</span>
+        </div>
+        <button type="submit" form="work-item-form" class="px-4 py-1.5 rounded-full bg-[#6236FF] text-white font-bold text-xs active:scale-95 transition">Add</button>
       </div>
+    </div>
 
-      <form onsubmit="handleSaveWorkItem(event)" class="space-y-3 text-xs">
+    <div class="max-w-2xl mx-auto p-3 sm:p-4 pb-28 space-y-4">
+      <form id="work-item-form" onsubmit="handleSaveWorkItem(event)" class="space-y-4">
         <input type="hidden" id="modal-work-id" />
-        
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">Item Title *</label>
-          <input type="text" id="modal-work-name" required placeholder="e.g. Interior Wall Painting (Primer + 2 Coats)" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-medium" />
+        <input type="hidden" id="modal-work-category" />
+
+        <div class="m3-card p-4 space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center">2</span>
+            <span class="font-extrabold text-xs tracking-wider text-slate-800 uppercase">Work Details</span>
+          </div>
+          <div id="work-category-chips" class="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1"></div>
         </div>
 
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">Category Tag</label>
-          <input type="text" id="modal-work-category" placeholder="e.g. PAINTING, TEXTURE, WATERPROOFING" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-medium uppercase" />
+        <div class="m3-card p-4 space-y-3 text-xs">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Work Name</label>
+            <input type="text" id="modal-work-name" required placeholder="e.g. Exterior Wall Painting" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-medium" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Rate (&#8377; per sq.ft)</label>
+            <input type="number" step="any" id="modal-work-rate" required placeholder="e.g. 100" class="w-full px-3 py-2 rounded-xl border-2 border-[#6236FF] font-mono font-bold text-sm" oninput="updateWorkModalCalc()" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Description</label>
+            <textarea id="modal-work-desc" rows="2" placeholder="e.g. 2 coats of acrylic putty, 1 coat primer..." class="w-full p-2.5 rounded-xl border border-slate-200 font-medium"></textarea>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Enter Area (Sq.Ft)</label>
+              <input type="text" id="modal-work-area" inputmode="decimal" placeholder="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono font-bold text-sm" oninput="updateWorkModalCalc()" />
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Amount</label>
+              <div class="px-3 py-2 bg-slate-100 rounded-xl border border-slate-200 flex items-center justify-between">
+                <span id="modal-work-amount" class="font-extrabold font-mono text-[#6236FF] text-sm">&#8377;0</span>
+                <span id="modal-work-rate-suffix" class="text-[10px] font-semibold text-slate-500">@0</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between pt-1">
+            <span id="modal-work-ref" class="text-[11px] text-slate-400">Item reference #WI-00</span>
+            <button type="button" onclick="closeWorkItemModal()" class="w-8 h-8 rounded-lg bg-slate-100 text-red-500 hover:bg-red-50 flex items-center justify-center">
+              <i class="fa-solid fa-trash-can text-xs"></i>
+            </button>
+          </div>
         </div>
 
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">Description / Specifications</label>
-          <textarea id="modal-work-desc" rows="2" placeholder="e.g. 2 coats of acrylic putty, 1 coat primer..." class="w-full p-2.5 rounded-xl border border-slate-300 font-medium"></textarea>
-        </div>
+        <button type="button" onclick="saveWorkItemAndAnother()" class="w-full py-3 rounded-2xl bg-[#6236FF] text-white font-bold text-sm flex items-center justify-center gap-1.5 active:scale-95 transition shadow">
+          <i class="fa-solid fa-plus text-xs"></i> Add Another Service
+        </button>
 
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">Rate (₹ per sq.ft) *</label>
-          <input type="number" step="any" id="modal-work-rate" required placeholder="e.g. 100" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-mono font-bold" />
-        </div>
-
-        <div class="pt-2 flex justify-end gap-2">
-          <button type="button" onclick="closeWorkItemModal()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-600 font-bold">Cancel</button>
-          <button type="submit" class="px-5 py-2 rounded-xl bg-gold hover:bg-goldhover text-navdark font-black shadow">Save Item</button>
+        <div class="text-white rounded-[20px] p-5 space-y-4 shadow-card" style="background: linear-gradient(135deg, #6B3ABA 0%, #4A1C93 100%);">
+          <h3 class="font-extrabold text-xs tracking-wider text-blue-100 uppercase">Summary Totals</h3>
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between items-center text-blue-100">
+              <span id="wm-subtotal-label">Subtotal (0 items):</span>
+              <span id="wm-subtotal-val" class="font-bold font-mono text-white text-sm">&#8377;0</span>
+            </div>
+            <div class="flex justify-between items-center pt-2">
+              <span class="font-black text-lg text-white">Grand Total:</span>
+              <span id="wm-grand-total-val" class="font-black font-mono text-2xl text-white">&#8377;0</span>
+            </div>
+          </div>
         </div>
       </form>
     </div>
   </div>
 
   <!-- MODAL 2: ADD / EDIT CLIENT -->
-  <div id="modal-client" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-        <h3 id="modal-client-title" class="font-extrabold text-slate-800 text-sm">Add New Client</h3>
-        <button onclick="closeClientModal()" class="w-7 h-7 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+  <div id="modal-client" class="fixed inset-0 z-30 bg-[#F4F6FC] overflow-y-auto hidden">
+    <div class="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-sm">
+      <div class="max-w-2xl mx-auto px-3 py-2.5 flex items-center justify-between">
+        <div class="flex items-center gap-1.5">
+          <button type="button" onclick="closeClientModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100 active:scale-95 transition">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <span id="modal-client-title" class="font-bold text-slate-800 text-sm">Add Client</span>
+        </div>
+        <button type="submit" form="client-form" class="px-4 py-1.5 rounded-full bg-[#6236FF] text-white font-bold text-xs active:scale-95 transition">Add</button>
       </div>
+    </div>
 
-      <form onsubmit="handleSaveClient(event)" class="space-y-3 text-xs">
+    <div class="max-w-2xl mx-auto p-3 sm:p-4 pb-28 space-y-4">
+      <form id="client-form" onsubmit="handleSaveClient(event)" class="space-y-4">
         <input type="hidden" id="modal-client-id" />
-        
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">Client Name *</label>
-          <input type="text" id="modal-client-name" required placeholder="e.g. Sunil Kumawat" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-medium" />
-        </div>
 
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">Phone Number *</label>
-          <input type="text" id="modal-client-phone" required placeholder="e.g. 9622222854" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-medium" />
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">Project Address / Site</label>
-          <textarea id="modal-client-address" rows="2" placeholder="e.g. kanak Avenue (Ankush ji)" class="w-full p-2.5 rounded-xl border border-slate-300 font-medium"></textarea>
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">Website (Optional)</label>
-          <input type="text" id="modal-client-gst" placeholder="e.g. www.clientwebsite.com" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-mono" />
-        </div>
-
-        <div class="pt-2 flex justify-end gap-2">
-          <button type="button" onclick="closeClientModal()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-600 font-bold">Cancel</button>
-          <button type="submit" class="px-5 py-2 rounded-xl bg-gold hover:bg-goldhover text-navdark font-black shadow">Save Client</button>
+        <div class="m3-card p-4 space-y-3 text-xs">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Client Name</label>
+            <input type="text" id="modal-client-name" required placeholder="e.g. Sunil Kumawat" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-medium" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Phone</label>
+            <input type="text" id="modal-client-phone" required placeholder="e.g. 9622222854" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-medium" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Address</label>
+            <textarea id="modal-client-address" rows="2" placeholder="e.g. kanak Avenue (Ankush ji)" class="w-full p-2.5 rounded-xl border border-slate-200 font-medium"></textarea>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Website / GST</label>
+            <input type="text" id="modal-client-gst" placeholder="e.g. www.clientwebsite.com" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono" />
+          </div>
         </div>
       </form>
     </div>
@@ -1650,12 +1697,19 @@
 
     // WORK MODAL HANDLERS
     function openAddWorkItemModal() {
-      document.getElementById('modal-work-title').innerText = "Add New Work Item";
+      document.getElementById('modal-work-title').innerText = "Add Work";
       document.getElementById('modal-work-id').value = "";
       document.getElementById('modal-work-name').value = "";
       document.getElementById('modal-work-category').value = "";
       document.getElementById('modal-work-desc').value = "";
       document.getElementById('modal-work-rate').value = "";
+      document.getElementById('modal-work-area').value = "";
+      const ref = document.getElementById('modal-work-ref');
+      if (ref) ref.innerText = `Item reference #WI-${String(appState.workItems.length + 1).padStart(2, '0')}`;
+      updateWorkModalCalc();
+      renderWorkCategoryChips();
+      renderWorkModalSummary();
+      setFabVisible(false);
       document.getElementById('modal-work-item').classList.remove('hidden');
     }
 
@@ -1663,17 +1717,82 @@
       const item = appState.workItems.find(w => w.id === id);
       if (!item) return;
 
-      document.getElementById('modal-work-title').innerText = "Edit Work Item";
+      document.getElementById('modal-work-title').innerText = "Edit Work";
       document.getElementById('modal-work-id').value = item.id;
       document.getElementById('modal-work-name').value = item.name;
       document.getElementById('modal-work-category').value = item.category || "";
       document.getElementById('modal-work-desc').value = item.desc || "";
       document.getElementById('modal-work-rate').value = item.rate;
+      document.getElementById('modal-work-area').value = "";
+      const idx = appState.workItems.findIndex(w => w.id === id) + 1;
+      const ref = document.getElementById('modal-work-ref');
+      if (ref) ref.innerText = `Item reference #WI-${String(idx).padStart(2, '0')}`;
+      updateWorkModalCalc();
+      renderWorkCategoryChips();
+      renderWorkModalSummary();
+      setFabVisible(false);
       document.getElementById('modal-work-item').classList.remove('hidden');
     }
 
     function closeWorkItemModal() {
       document.getElementById('modal-work-item').classList.add('hidden');
+      setFabVisible(true);
+    }
+
+    function setFabVisible(show) {
+      const fab = document.getElementById('main-fab');
+      if (fab) fab.classList.toggle('hidden', !show);
+    }
+
+    function renderWorkCategoryChips() {
+      const wrap = document.getElementById('work-category-chips');
+      if (!wrap) return;
+      const cats = Array.from(new Set(appState.workItems.map(w => (w.category || '').trim()).filter(Boolean)));
+      const list = cats.length ? cats : ['Painting', 'Waterproofing', 'Texturing'];
+      const current = (document.getElementById('modal-work-category').value || '').toUpperCase();
+      wrap.innerHTML = list.map(c => {
+        const active = c.toUpperCase() === current;
+        const label = c.charAt(0).toUpperCase() + c.slice(1).toLowerCase();
+        return `<button type="button" onclick="selectWorkCategory('${escapeHtml(c)}')" class="px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition ${active ? 'bg-[#6236FF] text-white shadow' : 'bg-slate-100 text-slate-600'}">${escapeHtml(label)}</button>`;
+      }).join('');
+    }
+
+    function selectWorkCategory(cat) {
+      document.getElementById('modal-work-category').value = cat;
+      renderWorkCategoryChips();
+    }
+
+    function updateWorkModalCalc() {
+      const rate = parseFloat(document.getElementById('modal-work-rate').value) || 0;
+      const area = parseFloat(document.getElementById('modal-work-area').value) || 0;
+      const amt = rate * area;
+      const a = document.getElementById('modal-work-amount');
+      const sfx = document.getElementById('modal-work-rate-suffix');
+      if (a) a.innerText = `${appState.profile.currency}${formatNumber(amt)}`;
+      if (sfx) sfx.innerText = `@${rate}`;
+    }
+
+    function renderWorkModalSummary() {
+      const q = appState.currentQuote;
+      let sub = 0;
+      (q.items || []).forEach(it => {
+        const w = appState.workItems.find(x => x.id === it.workId) || { rate: 0 };
+        sub += (parseFloat(it.area) || 0) * (w.rate || 0);
+      });
+      const l = document.getElementById('wm-subtotal-label');
+      const v = document.getElementById('wm-subtotal-val');
+      const g = document.getElementById('wm-grand-total-val');
+      if (l) l.innerText = `Subtotal (${(q.items || []).length} items):`;
+      if (v) v.innerText = `${appState.profile.currency}${formatNumber(sub)}`;
+      if (g) g.innerText = `${appState.profile.currency}${formatNumber(sub)}`;
+    }
+
+    function saveWorkItemAndAnother() {
+      const form = document.getElementById('work-item-form');
+      if (form && !form.reportValidity()) return;
+      const evt = new Event('submit', { cancelable: true });
+      handleSaveWorkItem(evt);
+      openAddWorkItemModal();
     }
 
     function handleSaveWorkItem(e) {
@@ -1764,7 +1883,8 @@
 
     // CLIENT MODAL HANDLERS
     function openAddClientModal() {
-      document.getElementById('modal-client-title').innerText = "Add New Client";
+      setFabVisible(false);
+      document.getElementById('modal-client-title').innerText = "Add Client";
       document.getElementById('modal-client-id').value = "";
       document.getElementById('modal-client-name').value = "";
       document.getElementById('modal-client-phone').value = "";
@@ -1777,6 +1897,7 @@
       const client = appState.clients.find(c => c.id === id);
       if (!client) return;
 
+      setFabVisible(false);
       document.getElementById('modal-client-title').innerText = "Edit Client";
       document.getElementById('modal-client-id').value = client.id;
       document.getElementById('modal-client-name').value = client.name;
@@ -1788,6 +1909,7 @@
 
     function closeClientModal() {
       document.getElementById('modal-client').classList.add('hidden');
+      setFabVisible(true);
     }
 
     function handleSaveClient(e) {
