@@ -1691,7 +1691,7 @@
     // QUOTATION TAB = ADD WORK PAGE
     let qwIndex = 0;
 
-    const CATEGORY_TYPES = ['Painting', 'Waterproofing', 'Texturing', 'Civil Work', 'Electrical', 'Plumbing', 'Tile Work', 'Wood Polish'];
+    const CATEGORY_TYPES = ['Painting', 'Interior Painting', 'Exterior Painting', 'Texture', 'Spray Painting', 'Wood Painting', 'Door & Window Painting', 'Primer & Putty Work', 'Wall Putty', 'Waterproof Painting', 'Damp Proof'];
 
     function renderWorkCategoryOptions(current) {
       const sel = document.getElementById('modal-work-category');
@@ -1714,10 +1714,7 @@
     function renderQuoteWorkChips() {
       const wrap = document.getElementById('qw-category-chips');
       if (!wrap) return;
-      const existing = Array.from(new Set(appState.workItems.map(w => (w.category || '').trim()).filter(Boolean)));
-      const seen = new Set(CATEGORY_TYPES.map(c => c.toUpperCase()));
-      const extra = existing.filter(c => !seen.has(c.toUpperCase()));
-      const list = [...CATEGORY_TYPES, ...extra];
+      const list = [...CATEGORY_TYPES];
       const selId = document.getElementById('qw-work-select') ? document.getElementById('qw-work-select').value : '';
       const cur = ((appState.workItems.find(w => w.id === selId) || {}).category || '').toUpperCase();
       wrap.innerHTML = list.map(c => {
