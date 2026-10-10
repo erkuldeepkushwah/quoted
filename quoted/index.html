@@ -326,6 +326,30 @@
         </div>
       </div>
 
+      <!-- QUOTE REFERENCE & DATES -->
+      <div class="m3-card p-4 space-y-3">
+        <div class="flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-slate-700 text-white font-bold text-xs flex items-center justify-center">1</span>
+          <span class="font-extrabold text-xs tracking-wider text-slate-900 uppercase">Quote Reference &amp; Dates</span>
+        </div>
+        <div class="space-y-2 text-xs">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Quote Reference</label>
+            <input type="text" id="quote-ref-input" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-mono font-bold text-slate-800" />
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Quotation Date</label>
+              <input type="date" id="quote-date-input" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-medium text-slate-800" />
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Valid Until</label>
+              <input type="date" id="quote-valid-input" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-medium text-slate-800" />
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- WORK DETAILS -->
       <div class="m3-card p-4 space-y-3">
         <div class="flex items-center justify-between">
@@ -1290,6 +1314,20 @@
     }
 
     // ==================== QUOTATION BUILDER RENDER ====================
+    function toISODate(str) {
+      const m = String(str || '').match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+      if (!m) return '';
+      let d = m[1].padStart(2, '0'), mo = m[2].padStart(2, '0'), y = m[3];
+      if (y.length === 2) y = '20' + y;
+      return `${y}-${mo}-${d}`;
+    }
+
+    function fromISODate(iso) {
+      const m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!m) return '';
+      return `${m[3]}/${m[2]}/${m[1].slice(2)}`;
+    }
+
     function renderQuotationBuilder() {
       const q = appState.currentQuote;
       const items = q.items || [];
@@ -1299,6 +1337,14 @@
 
       const pos = document.getElementById('qw-pos');
       if (pos) pos.innerText = `${items.length ? qwIndex + 1 : 0} / ${items.length}`;
+
+      // Quote reference & dates
+      const refEl = document.getElementById('quote-ref-input');
+      if (refEl) { refEl.value = q.refNo || ''; refEl.oninput = (e) => { q.refNo = e.target.value; saveLocalStorage(); }; }
+      const dEl = document.getElementById('quote-date-input');
+      if (dEl) { dEl.value = toISODate(q.date); dEl.onchange = (e) => { q.date = fromISODate(e.target.value) || q.date; saveLocalStorage(); }; }
+      const vEl = document.getElementById('quote-valid-input');
+      if (vEl) { vEl.value = toISODate(q.validUntil); vEl.onchange = (e) => { q.validUntil = fromISODate(e.target.value) || q.validUntil; saveLocalStorage(); }; }
 
       const sel = document.getElementById('qw-work-select');
       if (sel) {
