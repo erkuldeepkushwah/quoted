@@ -317,108 +317,87 @@
       <div class="sticky top-0 z-30 -mx-2.5 sm:-mx-4 -mt-2.5 sm:-mt-4 mb-1 bg-white border-b border-slate-100 shadow-sm">
         <div class="max-w-2xl mx-auto px-3 py-2.5 flex items-center justify-between">
           <div class="flex items-center gap-1.5">
-            <button onclick="switchTab('home')" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100 active:scale-95 transition">
-              <i class="fa-solid fa-arrow-left"></i>
+            <button type="button" onclick="switchTab('home')" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100 active:scale-95 transition">
+              <i class="fa-solid fa-chevron-left"></i>
             </button>
-            <span class="font-bold text-slate-800 text-sm">Quotation Builder</span>
+            <span class="font-bold text-slate-800 text-sm">Add Work</span>
           </div>
-          <button onclick="resetQuotationForm()" class="px-3.5 py-1.5 rounded-full bg-[#EDE7FF] text-[#6236FF] font-bold text-xs active:scale-95 transition">+ New</button>
+          <button type="button" onclick="saveQuoteWorkPage()" class="px-2 py-1 text-[#6236FF] font-extrabold text-sm active:scale-95 transition">Add</button>
         </div>
       </div>
 
-      <!-- CARD 1: QUOTE REFERENCE & DATES -->
-      <div class="m3-card p-4 space-y-3">
-        <h3 class="font-extrabold text-xs tracking-wider uppercase text-[#6236FF] flex items-center gap-1.5">
-          <i class="fa-regular fa-calendar-days"></i> QUOTE REFERENCE & DATES
-        </h3>
-
-        <div class="space-y-2 text-xs">
-          <div>
-            <label class="block font-bold text-slate-500 mb-1 uppercase text-[10px]">QUOTE REFERENCE</label>
-            <input type="text" id="quote-ref-input" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-mono font-bold text-slate-800 focus:ring-2 focus:ring-[#6236FF]" />
-          </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block font-bold text-slate-500 mb-1 uppercase text-[10px]">QUOTATION DATE</label>
-              <input type="text" id="quote-date-input" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-medium text-slate-800" />
-            </div>
-            <div>
-              <label class="block font-bold text-slate-500 mb-1 uppercase text-[10px]">VALID UNTIL</label>
-              <input type="text" id="quote-valid-input" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-medium text-slate-800" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD 2: SELECT CLIENT -->
+      <!-- WORK DETAILS -->
       <div class="m3-card p-4 space-y-3">
         <div class="flex items-center justify-between">
-          <h3 class="font-extrabold text-xs tracking-wider text-slate-800 flex items-center gap-1.5">
-            <i class="fa-solid fa-user text-[#6236FF]"></i> 1. SELECT CLIENT
-          </h3>
-          <button onclick="openAddClientModal()" class="px-3 py-1 rounded-full bg-[#EDE7FF] hover:bg-[#E4D9FF] text-[#6236FF] font-bold text-xs flex items-center gap-1 transition">
-            <i class="fa-solid fa-user-plus text-[10px]"></i> Add Client
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-slate-700 text-white font-bold text-xs flex items-center justify-center">2</span>
+            <span class="font-extrabold text-xs tracking-wider text-slate-900 uppercase">Work Details</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button type="button" onclick="prevQuoteWorkItem()" class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 active:scale-95"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+            <span id="qw-pos" class="text-[11px] font-bold text-slate-500">1 / 4</span>
+            <button type="button" onclick="nextQuoteWorkItem()" class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 active:scale-95"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+          </div>
+        </div>
+        <div id="qw-category-chips" class="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1"></div>
+      </div>
+
+      <!-- WORK ENTRY -->
+      <div class="m3-card p-4 space-y-3 text-xs">
+        <div>
+          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Work Name</label>
+          <div class="relative">
+            <select id="qw-work-select" onchange="onQuoteWorkNameChange()" class="w-full px-3 py-2 pr-8 rounded-xl border border-slate-200 bg-white font-semibold appearance-none"></select>
+            <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
+          </div>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Rate (&#8377; per sq.ft)</label>
+          <input type="number" step="any" id="qw-rate" class="w-full px-3 py-2 rounded-xl border-[3px] border-[#6236FF] font-mono font-bold text-sm" oninput="updateQuoteWorkCalc()" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Enter Area (Sq.Ft)</label>
+            <input type="text" id="qw-area" inputmode="decimal" placeholder="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-100 font-mono font-bold text-sm" oninput="updateQuoteWorkCalc()" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Amount</label>
+            <div class="px-3 py-2 bg-slate-100 rounded-xl border border-slate-200 flex items-center justify-between">
+              <span id="qw-amount" class="font-extrabold font-mono text-[#6236FF] text-sm">&#8377;0</span>
+              <span id="qw-rate-suffix" class="text-[10px] font-semibold text-slate-500">@0</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between pt-1">
+          <span id="qw-ref" class="text-[11px] text-slate-400">Item reference #WI-01</span>
+          <button type="button" onclick="deleteQuoteWorkFromPage()" class="w-8 h-8 rounded-lg bg-slate-100 text-red-500 hover:bg-red-50 flex items-center justify-center">
+            <i class="fa-solid fa-trash-can text-xs"></i>
           </button>
         </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-500 mb-1">Choose Client:</label>
-          <select id="quote-client-select" class="hidden" onchange="handleClientSelectChange()"></select>
-
-          <div class="relative">
-            <button type="button" id="client-picker-btn" onclick="toggleClientPicker()" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-white flex items-center justify-between gap-2 text-left">
-              <span class="flex items-center gap-2 min-w-0">
-                <span id="client-picker-avatar" class="w-7 h-7 rounded-full bg-[#6236FF] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">KK</span>
-                <span id="client-picker-label" class="text-xs font-medium text-slate-800 truncate">Select a client</span>
-              </span>
-              <i class="fa-solid fa-chevron-down text-slate-400 text-xs flex-shrink-0"></i>
-            </button>
-            <div id="client-picker-list" class="hidden absolute left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl z-40 max-h-60 overflow-y-auto"></div>
-          </div>
-        </div>
       </div>
 
-      <!-- CARD 3: WORK NAME & ITEMS -->
-      <div class="m3-card p-4 space-y-3">
-        <div class="flex items-center justify-between">
-          <h3 class="font-extrabold text-xs tracking-wider text-slate-800 flex items-center gap-1.5">
-            <i class="fa-solid fa-calculator text-[#6236FF]"></i> 2. WORK NAME & ITEMS
-          </h3>
-          <span id="quote-items-badge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#EDE7FF] text-[#6236FF]">4 Items</span>
-        </div>
+      <button type="button" onclick="saveQuoteWorkAndAnother()" class="w-full py-3 rounded-2xl bg-[#6236FF] text-white font-bold text-sm flex items-center justify-center gap-1.5 active:scale-95 transition shadow">
+        <i class="fa-solid fa-plus text-xs"></i> Add Another Service
+      </button>
 
-        <div id="quote-items-container" class="space-y-3"></div>
-
-        <button onclick="openQuoteWorkPage(-1)" class="w-full py-2.5 rounded-xl text-[#6236FF] font-bold text-sm flex items-center justify-center gap-1.5 hover:bg-[#F0EAFF] transition">
-          <i class="fa-solid fa-plus text-xs"></i> Add Another Work Item
-        </button>
-      </div>
-
-      <!-- CARD 4: SUMMARY TOTALS -->
       <div class="text-white rounded-[20px] p-5 space-y-4 shadow-card" style="background: linear-gradient(135deg, #6B3ABA 0%, #4A1C93 100%);">
-        <h3 class="font-extrabold text-xs tracking-wider text-blue-100 uppercase">
-          3. SUMMARY TOTALS
-        </h3>
-
-        <div class="space-y-2 border-b border-white/20 pb-3 text-xs">
-          <div class="flex justify-between items-center text-blue-100">
-            <span id="summary-subtotal-label">Subtotal (4 items):</span>
-            <span id="summary-subtotal-val" class="font-bold font-mono text-white text-sm">₹13,500</span>
+        <h3 class="font-extrabold text-xs tracking-wider text-white/90 uppercase">Summary Totals</h3>
+        <div class="space-y-2 text-xs">
+          <div class="flex justify-between items-center text-white/90">
+            <span id="qw-subtotal-label">Subtotal (0 items):</span>
+            <span id="qw-subtotal-val" class="font-bold font-mono text-white text-sm">&#8377;0</span>
           </div>
-
           <div class="flex justify-between items-center pt-2">
             <span class="font-black text-lg text-white">Grand Total:</span>
-            <span id="summary-grand-total-val" class="font-black font-mono text-2xl text-white">₹13,500</span>
+            <span id="qw-grand-total-val" class="font-black font-mono text-2xl text-white">&#8377;0</span>
           </div>
         </div>
-
         <div class="flex gap-2">
-          <button onclick="triggerPrint()" class="flex-1 py-3 rounded-2xl border border-white/50 text-white font-bold text-sm flex items-center justify-center gap-2 active:scale-95 transition">
+          <button type="button" onclick="triggerPrint()" class="flex-1 py-3 rounded-2xl border border-white/60 bg-white/10 text-white font-bold text-sm flex items-center justify-center gap-2 active:scale-95 transition">
             <i class="fa-solid fa-file-pdf"></i> PDF
           </button>
-          <button onclick="saveQuotation()" class="flex-1 py-3 rounded-2xl bg-[#7C4DFF] text-white font-black text-sm flex items-center justify-center gap-2 active:scale-95 transition shadow-lg">
-            <i class="fa-solid fa-floppy-disk"></i> Save Quote
+          <button type="button" onclick="saveQuotation()" class="flex-1 py-3 rounded-2xl bg-[#7C4DFF] text-white font-black text-sm flex items-center justify-center gap-2 active:scale-95 transition shadow">
+            <i class="fa-solid fa-download"></i> Save Quote
           </button>
         </div>
       </div>
@@ -695,91 +674,6 @@
           <button type="submit" class="px-5 py-2 rounded-xl bg-gold hover:bg-goldhover text-navdark font-black shadow">Save Client</button>
         </div>
       </form>
-    </div>
-  </div>
-
-  <!-- FULL-SCREEN: ADD / EDIT QUOTATION WORK ITEM -->
-  <div id="modal-quote-work" class="fixed inset-0 z-30 bg-[#F4F6FC] overflow-y-auto hidden">
-    <div class="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-sm">
-      <div class="max-w-2xl mx-auto px-3 py-2.5 flex items-center justify-between">
-        <div class="flex items-center gap-1.5">
-          <button type="button" onclick="closeQuoteWorkPage()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100 active:scale-95 transition">
-            <i class="fa-solid fa-chevron-left"></i>
-          </button>
-          <span id="qw-title" class="font-bold text-slate-800 text-sm">Add Work</span>
-        </div>
-        <button type="button" onclick="saveQuoteWorkPage()" class="px-2 py-1 text-[#6236FF] font-extrabold text-sm active:scale-95 transition">Add</button>
-      </div>
-    </div>
-
-    <div class="max-w-2xl mx-auto p-3 sm:p-4 pb-28 space-y-4">
-      <div class="m3-card p-4 space-y-3">
-        <div class="flex items-center gap-2">
-          <span class="w-6 h-6 rounded-full bg-slate-700 text-white font-bold text-xs flex items-center justify-center">2</span>
-          <span class="font-extrabold text-xs tracking-wider text-slate-900 uppercase">Work Details</span>
-        </div>
-        <div id="qw-category-chips" class="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1"></div>
-      </div>
-
-      <div class="m3-card p-4 space-y-3 text-xs">
-        <div>
-          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Work Name</label>
-          <div class="relative">
-            <select id="qw-work-select" onchange="onQuoteWorkNameChange()" class="w-full px-3 py-2 pr-8 rounded-xl border border-slate-200 bg-white font-semibold appearance-none"></select>
-            <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
-          </div>
-        </div>
-        <div>
-          <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Rate (&#8377; per sq.ft)</label>
-          <input type="number" step="any" id="qw-rate" class="w-full px-3 py-2 rounded-xl border-[3px] border-[#6236FF] font-mono font-bold text-sm" oninput="updateQuoteWorkCalc()" />
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Enter Area (Sq.Ft)</label>
-            <input type="text" id="qw-area" inputmode="decimal" placeholder="0" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-100 font-mono font-bold text-sm" oninput="updateQuoteWorkCalc()" />
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Amount</label>
-            <div class="px-3 py-2 bg-slate-100 rounded-xl border border-slate-200 flex items-center justify-between">
-              <span id="qw-amount" class="font-extrabold font-mono text-[#6236FF] text-sm">&#8377;0</span>
-              <span id="qw-rate-suffix" class="text-[10px] font-semibold text-slate-500">@0</span>
-            </div>
-          </div>
-        </div>
-        <div class="flex items-center justify-between pt-1">
-          <span id="qw-ref" class="text-[11px] text-slate-400">Item reference #WI-00</span>
-          <button type="button" onclick="deleteQuoteWorkFromPage()" class="w-8 h-8 rounded-lg bg-slate-100 text-red-500 hover:bg-red-50 flex items-center justify-center">
-            <i class="fa-solid fa-trash-can text-xs"></i>
-          </button>
-        </div>
-      </div>
-
-      <button type="button" onclick="saveQuoteWorkAndAnother()" class="w-full py-3 rounded-2xl bg-[#6236FF] text-white font-bold text-sm flex items-center justify-center gap-1.5 active:scale-95 transition shadow">
-        <i class="fa-solid fa-plus text-xs"></i> Add Another Service
-      </button>
-
-      <div class="text-white rounded-[20px] p-5 space-y-4 shadow-card" style="background: linear-gradient(135deg, #6B3ABA 0%, #4A1C93 100%);">
-        <h3 class="font-extrabold text-xs tracking-wider text-white/90 uppercase">Summary Totals</h3>
-        <div class="space-y-2 text-xs">
-          <div class="flex justify-between items-center text-white/90">
-            <span id="qw-subtotal-label">Subtotal (0 items):</span>
-            <span id="qw-subtotal-val" class="font-bold font-mono text-white text-sm">&#8377;0</span>
-          </div>
-          <div class="flex justify-between items-center pt-2">
-            <span class="font-black text-lg text-white">Grand Total:</span>
-            <span id="qw-grand-total-val" class="font-black font-mono text-2xl text-white">&#8377;0</span>
-          </div>
-        </div>
-
-        <div class="flex gap-2">
-          <button type="button" onclick="triggerPrint()" class="flex-1 py-3 rounded-2xl border border-white/60 bg-white/10 text-white font-bold text-sm flex items-center justify-center gap-2 active:scale-95 transition">
-            <i class="fa-solid fa-file-pdf"></i> PDF
-          </button>
-          <button type="button" onclick="saveQuotation(); closeQuoteWorkPage();" class="flex-1 py-3 rounded-2xl bg-[#7C4DFF] text-white font-black text-sm flex items-center justify-center gap-2 active:scale-95 transition shadow">
-            <i class="fa-solid fa-download"></i> Save Quote
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -1158,6 +1052,10 @@
       if (tabName === 'item') {
         switchItemSubTab(appState.itemSubTab);
       }
+      if (tabName === 'quotation') {
+        qwIndex = 0;
+        renderQuotationBuilder();
+      }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1397,102 +1295,42 @@
     // ==================== QUOTATION BUILDER RENDER ====================
     function renderQuotationBuilder() {
       const q = appState.currentQuote;
-      document.getElementById('quote-ref-input').value = q.refNo || "";
-      document.getElementById('quote-date-input').value = q.date || "";
-      document.getElementById('quote-valid-input').value = q.validUntil || "";
+      const items = q.items || [];
+      if (qwIndex >= items.length) qwIndex = Math.max(0, items.length - 1);
+      if (qwIndex < 0) qwIndex = 0;
+      const item = items[qwIndex] || null;
 
-      // Render Client Dropdown
-      const clientSelect = document.getElementById('quote-client-select');
-      clientSelect.innerHTML = '';
-      appState.clients.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.id;
-        opt.innerText = `${c.name} (${c.phone})`;
-        if (c.id === q.clientId) opt.selected = true;
-        clientSelect.appendChild(opt);
-      });
-      renderClientPicker();
+      const pos = document.getElementById('qw-pos');
+      if (pos) pos.innerText = `${items.length ? qwIndex + 1 : 0} / ${items.length}`;
 
-      // Bind input events
-      document.getElementById('quote-ref-input').oninput = (e) => { appState.currentQuote.refNo = e.target.value; saveLocalStorage(); };
-      document.getElementById('quote-date-input').oninput = (e) => { appState.currentQuote.date = e.target.value; saveLocalStorage(); };
-      document.getElementById('quote-valid-input').oninput = (e) => { appState.currentQuote.validUntil = e.target.value; saveLocalStorage(); };
+      const sel = document.getElementById('qw-work-select');
+      if (sel) {
+        sel.innerHTML = appState.workItems.map(w =>
+          `<option value="${w.id}">${escapeHtml(w.name)} (${appState.profile.currency}${w.rate}/sq.ft)</option>`
+        ).join('');
+        if (item && item.workId) sel.value = item.workId;
+      }
 
-      // Render Items List
-      const itemsContainer = document.getElementById('quote-items-container');
-      itemsContainer.innerHTML = '';
+      const rateEl = document.getElementById('qw-rate');
+      if (rateEl) {
+        const wsel = appState.workItems.find(w => w.id === (sel ? sel.value : '')) || { rate: 0 };
+        rateEl.value = (item && item.rateOverride !== undefined) ? item.rateOverride : (wsel.rate || 0);
+      }
 
-      document.getElementById('quote-items-badge').innerText = `${q.items.length} Items`;
+      const areaEl = document.getElementById('qw-area');
+      if (areaEl) areaEl.value = (item && item.area) ? item.area : '';
 
-      let subtotal = 0;
+      const ref = document.getElementById('qw-ref');
+      if (ref) ref.innerText = `Item reference #WI-${String(qwIndex + 1).padStart(2, '0')}`;
 
-      q.items.forEach((item, index) => {
-        const workItem = appState.workItems.find(w => w.id === item.workId) || { name: 'Custom Work Item', rate: 0 };
-        const rate = itemRate(item);
-        const area = item.area || 0;
-        const amount = area * rate;
-        subtotal += amount;
-
-        const row = document.createElement('div');
-        row.className = "bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200 space-y-2.5 relative";
-        
-        // Options for work selector
-        let workOptionsHtml = '';
-        appState.workItems.forEach(w => {
-          const selected = w.id === item.workId ? 'selected' : '';
-          workOptionsHtml += `<option value="${w.id}" ${selected}>${escapeHtml(w.name)} (${appState.profile.currency}${w.rate}/sq.ft)</option>`;
-        });
-
-        const displayName = item.customName || workItem.name;
-
-        row.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">WORK NAME</span>
-            <span class="text-[11px] font-bold text-[#6236FF]">Rate: ${appState.profile.currency}${rate}/sq.ft</span>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center flex-shrink-0">
-              ${index + 1}
-            </span>
-            <select class="flex-1 px-3 py-2 rounded-xl border border-slate-300 bg-white font-semibold text-xs text-slate-800 focus:ring-2 focus:ring-[#6236FF]" onclick="event.stopPropagation()" onchange="updateQuoteWorkItem(${index}, 'workId', this.value)">
-              ${workOptionsHtml}
-            </select>
-          </div>
-
-          <div class="flex items-end gap-2 pt-1">
-            <div class="flex-1">
-              <label class="block text-[10px] font-bold text-slate-500 mb-0.5">ENTER AREA (SQ.FT)</label>
-              <input type="text" inputmode="decimal" pattern="[0-9.]*" value="${item.area !== undefined && item.area !== null && item.area !== 0 ? item.area : (item.area === 0 ? '' : item.area)}" placeholder="0" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 font-mono font-bold text-sm bg-white focus:ring-2 focus:ring-[#6236FF]" onclick="event.stopPropagation()" oninput="updateQuoteWorkItem(${index}, 'area', this.value, this)" />
-            </div>
-
-            <div class="flex-1">
-              <label class="block text-[10px] font-bold text-slate-500 mb-0.5">AMOUNT</label>
-              <div class="px-3 py-1.5 bg-slate-100 rounded-xl border border-slate-200 flex items-center gap-1">
-                <span id="quote-item-amount-${index}" class="font-extrabold font-mono text-[#6236FF] text-sm">${appState.profile.currency}${formatNumber(amount)}</span>
-                <span id="quote-item-rate-${index}" class="text-[10px] font-semibold text-slate-500">@${rate}</span>
-              </div>
-            </div>
-
-            <button onclick="event.stopPropagation(); removeQuoteWorkItem(${index})" class="w-9 h-9 rounded-full bg-white border border-slate-200 text-red-500 hover:text-red-700 flex items-center justify-center flex-shrink-0">
-              <i class="fa-solid fa-trash-can text-xs"></i>
-            </button>
-          </div>
-        `;
-
-        row.style.cursor = 'pointer';
-        row.onclick = () => openQuoteWorkPage(index);
-        itemsContainer.appendChild(row);
-      });
-
-      // Render Summary Cards
-      document.getElementById('summary-subtotal-label').innerText = `Subtotal (${q.items.length} items):`;
-      document.getElementById('summary-subtotal-val').innerText = `${appState.profile.currency}${formatNumber(subtotal)}`;
-      document.getElementById('summary-grand-total-val').innerText = `${appState.profile.currency}${formatNumber(subtotal)}`;
+      renderQuoteWorkChips();
+      updateQuoteWorkCalc();
+      renderQuoteWorkSummary();
     }
 
     function handleClientSelectChange() {
       const select = document.getElementById('quote-client-select');
+      if (!select) return;
       appState.currentQuote.clientId = select.value;
       saveLocalStorage();
     }
@@ -1854,8 +1692,8 @@
       });
     }
 
-    // QUOTATION WORK ITEM FULL-SCREEN PAGE
-    let qwEditingIndex = -1;
+    // QUOTATION TAB = ADD WORK PAGE
+    let qwIndex = 0;
 
     function itemRate(item) {
       if (item && item.rateOverride !== undefined && item.rateOverride !== null && item.rateOverride !== '') {
@@ -1865,59 +1703,12 @@
       return w.rate || 0;
     }
 
-    function openQuoteWorkPage(index) {
-      qwEditingIndex = (typeof index === 'number') ? index : -1;
-      const q = appState.currentQuote;
-      const item = qwEditingIndex >= 0 ? q.items[qwEditingIndex] : null;
-
-      document.getElementById('qw-title').innerText = item ? 'Edit Work' : 'Add Work';
-
-      const sel = document.getElementById('qw-work-select');
-      sel.innerHTML = appState.workItems.map(w =>
-        `<option value="${w.id}">${escapeHtml(w.name)} (${appState.profile.currency}${w.rate}/sq.ft)</option>`
-      ).join('');
-      if (item && item.workId) sel.value = item.workId;
-
-      const wsel = appState.workItems.find(w => w.id === sel.value) || { rate: 0 };
-      document.getElementById('qw-rate').value = (item && item.rateOverride !== undefined) ? item.rateOverride : (wsel.rate || 0);
-      document.getElementById('qw-area').value = (item && item.area) ? item.area : '';
-
-      const n = (qwEditingIndex >= 0 ? qwEditingIndex : q.items.length) + 1;
-      document.getElementById('qw-ref').innerText = `Item reference #WI-${String(n).padStart(2, '0')}`;
-
-      renderQuoteWorkChips();
-      updateQuoteWorkCalc();
-      renderQuoteWorkSummary();
-      setFabVisible(false);
-      setNavActiveForPage('quotation');
-      document.getElementById('modal-quote-work').classList.remove('hidden');
-    }
-
-    function closeQuoteWorkPage() {
-      document.getElementById('modal-quote-work').classList.add('hidden');
-      setFabVisible(true);
-      setNavActiveForPage(appState.activeTab);
-    }
-
-    function setNavActiveForPage(tab) {
-      ['home', 'quotation', 'item', 'more'].forEach(t => {
-        const btn = document.getElementById(`nav-btn-${t}`);
-        const ind = document.getElementById(`nav-indicator-${t}`);
-        if (!btn) return;
-        const on = (t === tab);
-        btn.className = on
-          ? "relative flex flex-col items-center justify-center gap-0.5 text-[#1F7BFF]"
-          : "relative flex flex-col items-center justify-center gap-0.5 text-[#9CA3AF] hover:text-slate-600";
-        if (ind) ind.classList.toggle('hidden', !on);
-      });
-    }
-
     function renderQuoteWorkChips() {
       const wrap = document.getElementById('qw-category-chips');
       if (!wrap) return;
       const cats = Array.from(new Set(appState.workItems.map(w => (w.category || '').trim()).filter(Boolean)));
       const list = cats.length ? cats : ['Painting', 'Waterproofing', 'Texturing'];
-      const selId = document.getElementById('qw-work-select').value;
+      const selId = document.getElementById('qw-work-select') ? document.getElementById('qw-work-select').value : '';
       const cur = ((appState.workItems.find(w => w.id === selId) || {}).category || '').toUpperCase();
       wrap.innerHTML = list.map(c => {
         const active = c.toUpperCase() === cur;
@@ -1929,8 +1720,8 @@
     function filterQuoteWorkByCategory(cat) {
       const first = appState.workItems.find(w => (w.category || '').toUpperCase() === cat.toUpperCase());
       if (!first) return;
-      document.getElementById('qw-work-select').value = first.id;
-      onQuoteWorkNameChange();
+      const sel = document.getElementById('qw-work-select');
+      if (sel) { sel.value = first.id; onQuoteWorkNameChange(); }
     }
 
     function onQuoteWorkNameChange() {
@@ -1965,37 +1756,47 @@
 
     function commitQuoteWork() {
       const sel = document.getElementById('qw-work-select');
+      if (!sel || !sel.value) return false;
       const rate = parseFloat(document.getElementById('qw-rate').value) || 0;
       const area = parseFloat(document.getElementById('qw-area').value) || 0;
-      if (!sel.value) { alert('Please add a work item first.'); return false; }
       const q = appState.currentQuote;
-      const entry = { workId: sel.value, area: area, customName: '', rateOverride: rate };
-      if (qwEditingIndex >= 0) q.items[qwEditingIndex] = entry;
-      else q.items.push(entry);
+      if (!q.items[qwIndex]) q.items[qwIndex] = { workId: sel.value, area: 0, customName: '' };
+      q.items[qwIndex].workId = sel.value;
+      q.items[qwIndex].area = area;
+      q.items[qwIndex].rateOverride = rate;
       saveLocalStorage();
       return true;
     }
 
+    function prevQuoteWorkItem() {
+      if (qwIndex > 0) { commitQuoteWork(); qwIndex--; renderQuotationBuilder(); }
+    }
+
+    function nextQuoteWorkItem() {
+      if (qwIndex < appState.currentQuote.items.length - 1) { commitQuoteWork(); qwIndex++; renderQuotationBuilder(); }
+    }
+
     function saveQuoteWorkPage() {
-      if (!commitQuoteWork()) return;
-      renderQuotationBuilder();
-      closeQuoteWorkPage();
+      commitQuoteWork();
+      saveQuotation();
     }
 
     function saveQuoteWorkAndAnother() {
-      if (!commitQuoteWork()) return;
+      commitQuoteWork();
+      const q = appState.currentQuote;
+      q.items.push({ workId: appState.workItems[0] ? appState.workItems[0].id : '', area: 0, customName: '' });
+      qwIndex = q.items.length - 1;
+      saveLocalStorage();
       renderQuotationBuilder();
-      openQuoteWorkPage(-1);
     }
 
     function deleteQuoteWorkFromPage() {
-      if (qwEditingIndex >= 0) {
-        if (appState.currentQuote.items.length <= 1) { alert('Quotation must have at least 1 work item.'); return; }
-        appState.currentQuote.items.splice(qwEditingIndex, 1);
-        saveLocalStorage();
-      }
+      const q = appState.currentQuote;
+      if (q.items.length <= 1) { alert('Quotation must have at least 1 work item.'); return; }
+      q.items.splice(qwIndex, 1);
+      if (qwIndex >= q.items.length) qwIndex = q.items.length - 1;
+      saveLocalStorage();
       renderQuotationBuilder();
-      closeQuoteWorkPage();
     }
 
     // CLIENT MODAL HANDLERS
